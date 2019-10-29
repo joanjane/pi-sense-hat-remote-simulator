@@ -1,0 +1,29 @@
+{
+  "name": "pi-sense-hat-remote-display",
+  "version": "1.0.0",
+  "description": "Project to simulate a LED matrix in a web environment for testing purposes",
+  "scripts": {
+    "prestart": "npm run build-web",
+    "start": "serve",
+    "build-web": "babel src/web -d dist",
+    "ws-serve": "node run-server.js",
+    "message": "node run-message.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joanjane/pi-sense-hat-remote-display.git"
+  },
+  "author": "Joan Jané",
+  "license": "ISC",
+  "homepage": "https://github.com/joanjane/pi-sense-hat-remote-display#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "dotenv": "^8.2.0",
+    "serve": "^11.2.0",
+    "ws": "^7.2.0"
+  },
+  "devDependencies": {
+    "sense-hat-led": "1.0.1"
+  }
+}

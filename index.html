@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Web Remote Display</title>
+    <script src="/dist/web-remote-display.js"></script>
+  </head>
+  <body>
+      <div id="display"></div>
+      <script>
+        var webRemoteDisplay = new WebRemoteDisplay(
+          document.querySelector('#display'),
+          'test',
+          'ws://localhost:8080'
+          );
+        webRemoteDisplay.connect();
+      </script>
+  </body>
+</html>
