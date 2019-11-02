@@ -15,7 +15,7 @@ module.exports.WsClient = class WsClient {
   }
   
   close() {
-    this.ws.close();
+    this.ws && this.ws.close();
     return this;
   }
 

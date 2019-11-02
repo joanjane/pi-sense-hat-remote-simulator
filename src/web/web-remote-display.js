@@ -5,15 +5,23 @@ import { WsClient } from '../client/ws-client';
 import { actionTypes } from '../client/actions';
 
 export function WebRemoteDisplay({ device, serverUri }) {
-  const client = new WsClient(serverUri);
   const [message, setMessage] = useState(emptyMessage());
   const [display, setDisplay] = useState(emptyDisplay());
   const [wsStatus, setWsStatus] = useState({ connected: false });
+  const client = new WsClient(serverUri);
 
   function init() {
     console.log('Initializing web remote display');
+    
+    try {
+      client.connect()
+    } catch(error) {
+      console.error(error);
+      setWsStatus({ ...wsStatus, connected: false });
+      return;
+    }
+
     client
-      .connect()
       .onOpen(() => {
         console.log(`WS state: ${client.readyState}`);
         setWsStatus({ ...wsStatus, connected: true });

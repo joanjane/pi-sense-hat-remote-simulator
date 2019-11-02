@@ -11,8 +11,15 @@ export function Joystick({ device, serverUri }) {
 
   function init() {
     console.log('Initializing web remote display');
+    try {
+      client.connect()
+    } catch(error) {
+      console.error(error);
+      setState({ ...state, connected: false });
+      return;
+    }
+
     client
-      .connect()
       .onOpen(() => {
         window.addEventListener('keydown', handleKeyDown);
         console.log(`WS state: ${client.readyState}`);
