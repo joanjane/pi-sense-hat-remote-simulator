@@ -1,6 +1,6 @@
-const WebSocket = require('ws');
+const WebSocket = require('./ws');
 
-module.exports.Client = class Client {
+module.exports.WsClient = class WsClient {
   constructor(serverUri) {
     this.serverUri = serverUri;
   }

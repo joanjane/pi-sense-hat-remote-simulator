@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "Project to simulate a LED matrix in a web environment for testing purposes",
   "scripts": {
-    "prestart": "npm run build-web",
-    "start": "serve",
-    "build-web": "babel src/web -d dist",
-    "ws-serve": "node run-server.js",
-    "message": "node run-message.js"
+    "start": "webpack-dev-server",
+    "build-web": "webpack -p",
+    "ws-serve": "node scripts/run-server.js",
+    "message": "node scripts/run-message.js"
   },
   "repository": {
     "type": "git",
@@ -17,13 +16,19 @@
   "license": "ISC",
   "homepage": "https://github.com/joanjane/pi-sense-hat-remote-display#readme",
   "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.2.0",
     "dotenv": "^8.2.0",
+    "html-webpack-plugin": "^3.2.0",
     "serve": "^11.2.0",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0",
     "ws": "^7.2.0"
   },
-  "devDependencies": {
-    "sense-hat-led": "1.0.1"
-  }
+  "devDependencies": {}
 }

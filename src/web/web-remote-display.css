@@ -1,0 +1,21 @@
+html {
+  box-sizing: content-box;
+  font-family: 'Consolas', 'Courier New', Courier, monospace;
+}
+
+.remote-display__panel {
+  border-collapse: collapse;
+  margin: 0 auto;
+  border: none;
+}
+
+.remote-display .remote-display__pixel {
+  padding: 2rem;
+  border: 1px solid #fff;
+}
+
+.remote-display .remote-display__message {
+  padding-top: 1rem;
+  font-size: 2rem;
+  text-align: center;
+}
