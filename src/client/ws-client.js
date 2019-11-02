@@ -9,6 +9,11 @@ module.exports.WsClient = class WsClient {
     this.ws = new WebSocket(this.serverUri);
     return this;
   }
+  
+  terminate() {
+    this.ws.terminate();
+    return this;
+  }
 
   send(payload) {
     this.checkConnection();

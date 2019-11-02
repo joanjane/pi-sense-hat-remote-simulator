@@ -1,0 +1,29 @@
+html {
+  --font-family: 'Consolas', 'Courier New', Courier, monospace;
+  --primary-color: #242424;
+  --primary-color-alt: white;
+
+  box-sizing: content-box;
+  font-family: var(--font-family);
+  background: var(--primary-color);
+  color: var(--primary-color-alt);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: .2rem;
+}
+
+.form-control {
+  background: transparent;
+  border: 1px solid var(--primary-color-alt);
+  color: var(--primary-color-alt);
+  font-family: var(--font-family);
+  padding: .4rem;
+}

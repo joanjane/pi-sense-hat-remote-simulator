@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "Project to simulate a LED matrix in a web environment for testing purposes",
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "webpack-dev-server --port 3000",
     "build-web": "webpack -p",
     "ws-serve": "node scripts/run-server.js",
-    "message": "node scripts/run-message.js"
+    "message": "node scripts/run-message.js",
+    "predeploy": "npm run build-web",
+    "deploy": "gh-pages -d dist -b gh-pages"
   },
   "repository": {
     "type": "git",
@@ -18,11 +20,15 @@
   "dependencies": {
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
+    "@babel/preset-react": "^7.6.3",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.2.0",
     "dotenv": "^8.2.0",
+    "gh-pages": "^2.1.1",
     "html-webpack-plugin": "^3.2.0",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
     "serve": "^11.2.0",
     "style-loader": "^1.0.0",
     "webpack": "^4.41.2",

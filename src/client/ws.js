@@ -16,6 +16,10 @@ class BrowserWebSocket {
   send(data) {
     return this.ws.send(data);
   }
+
+  close() {
+    return this.ws.close();
+  }
 }
 
 let WebSocketImplementation = null;

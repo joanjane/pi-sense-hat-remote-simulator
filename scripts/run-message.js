@@ -7,7 +7,11 @@ console.log('Starting...');
 client.connect(() => {
   console.log('Sending pixel');
   client.setPixel(4, 4, '#aa55dd');
-  client.showMessage('This is a test message', 0, '#bbaa00');
+  console.log('Sending message');
+  client.showMessage(`This is a test message ${Date.now()}`, 0, '#bbaa00');
   console.log('Sent');
-  process.exit(0);
+  setTimeout(() => {
+    // wait 5 seconds to finish sending message
+    process.exit(0);
+  }, 5000);
 })

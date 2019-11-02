@@ -1,78 +1,91 @@
+import React, { useState, useEffect } from 'react';
 import './web-remote-display.css';
 
 import { WsClient } from '../client/ws-client';
 import { actionTypes } from '../client/actions';
 
-export class WebRemoteDisplay {
-  constructor(renderElem, { device, serverUri }) {
-    this.renderElem = renderElem;
-    this.device = device;
-    this.display = empty();
-    this.client = new WsClient(serverUri);
-    this.message = null;
-    this.messageColor = null;
-  }
+export function WebRemoteDisplay({ device, serverUri }) {
+  const client = new WsClient(serverUri);
+  const [message, setMessage] = useState(emptyMessage());
+  const [display, setDisplay] = useState(emptyDisplay());
+  let currentMessageTimeout = null;
 
-  init() {
-    this.client
+  function init() {
+    console.log('Initializing web remote display');
+    client
       .connect()
       .onOpen(() => {
-        this.client.onMessage((message) => {
-          this.handleMessage(message);
+        client.onMessage((message) => {
+          handleMessage(message);
         });
       });
-    this.render();
   }
 
-  handleMessage(message) {
-    if (message.target !== this.device) return;
+  function handleMessage(message) {
+    if (message.target !== device) return;
 
+    console.log(`Received message`, message);
     if (message.type === actionTypes.displayMatrix) {
-      this.display = message.matrix;
-      this.render();
+      setDisplay(message.matrix);
     } else if (message.type === actionTypes.displayMessage) {
-      this.showMessage(message.text, message.color);
+      showMessage(message.text, message.color);
     }
   }
 
-  showMessage(message, color) {
-    this.message = message;
-    this.messageColor = color;
-    this.render();
-    setTimeout(() => {
-      this.message = null;
-      this.messageColor = null;
-      this.render();
+  function showMessage(text, color) {
+    if (message.currentTimeout) {
+      clearTimeout(message.currentTimeout);
+    }
+    const currentTimeout = setTimeout(() => {
+      setMessage(emptyMessage());
     }, 15000);
-    console.log(message);
+
+    setMessage({
+      text,
+      color,
+      currentTimeout
+    });
   }
 
-  render() {
-    console.log(this.display);
-    this.renderElem.innerHTML = `
-      <div class="remote-display">
-        <table class="remote-display__panel">
-        ${this.display.map(row => {
-          return `
-            <tr>
-                ${row.map(cell =>
-                  `<td style="background: ${cell};" class="remote-display__pixel"></td>`
-                ).join('')}
-            </tr>
-            `;
-          }).join('')}
-        </table>
-        ${this.message ? `
-          <p class="remote-display__message" style="color: ${this.messageColor};">
-            ${this.message}
-          </p>` : ''}
-      </div>`;
-  }
+  useEffect(() => {
+    init();
+
+    return () => {
+      client.close();
+    }
+  }, []);
+
+  return (
+    <div className="remote-display">
+      <table className="remote-display__panel">
+        <tbody>
+          {
+            display.map((row, y) => (
+              <tr key={y}>
+                {
+                  row.map((cell, x) =>
+                    <td key={x} style={({background: cell})} className="remote-display__pixel"></td>
+                  )
+                }
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+      {
+        message.text ?
+          <p className="remote-display__message" style={({color: message.color})}>
+            {message.text}
+          </p> :
+          ''
+      }
+    </div>
+  );
 }
 
 
 const O = '#000000';
-const empty = () => [
+const emptyDisplay = () => [
   [O, O, O, O, O, O, O, O],
   [O, O, O, O, O, O, O, O],
   [O, O, O, O, O, O, O, O],
@@ -82,3 +95,9 @@ const empty = () => [
   [O, O, O, O, O, O, O, O],
   [O, O, O, O, O, O, O, O]
 ];
+
+const emptyMessage = () => ({
+  text: '',
+  color: '',
+  currentTimeout: null
+});
