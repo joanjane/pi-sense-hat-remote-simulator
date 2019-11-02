@@ -5,13 +5,17 @@ module.exports.WsClient = class WsClient {
     this.serverUri = serverUri;
   }
 
+  get readyState() {
+    return this.ws.readyState;
+  }
+
   connect() {
     this.ws = new WebSocket(this.serverUri);
     return this;
   }
   
-  terminate() {
-    this.ws.terminate();
+  close() {
+    this.ws.close();
     return this;
   }
 
@@ -23,18 +27,28 @@ module.exports.WsClient = class WsClient {
 
   onOpen(callback) {
     this.checkConnection();
-    this.ws.on('open', () => {
-      callback();
-    });
+    this.ws.onopen = callback;
+    return this;
+  }
+
+  onClose(callback) {
+    this.checkConnection();
+    this.ws.onclose = callback;
+
+    return this;
+  }
+
+  onError(callback) {
+    this.ws.onerror = callback;
     return this;
   }
 
   onMessage(callback) {
     this.checkConnection();
-    this.ws.on('message', (data) => {
-      const payload = JSON.parse(data);
+    this.ws.onmessage = (event) => {
+      const payload = JSON.parse(event.data);
       callback(payload);
-    });
+    };
     return this;
   }
 

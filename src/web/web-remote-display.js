@@ -8,16 +8,26 @@ export function WebRemoteDisplay({ device, serverUri }) {
   const client = new WsClient(serverUri);
   const [message, setMessage] = useState(emptyMessage());
   const [display, setDisplay] = useState(emptyDisplay());
-  let currentMessageTimeout = null;
+  const [wsStatus, setWsStatus] = useState({ connected: false });
 
   function init() {
     console.log('Initializing web remote display');
     client
       .connect()
       .onOpen(() => {
+        console.log(`WS state: ${client.readyState}`);
+        setWsStatus({ ...wsStatus, connected: true });
         client.onMessage((message) => {
           handleMessage(message);
         });
+      })
+      .onError((e) => {
+        console.log('Error on WebSocket', e);
+        setWsStatus({ ...wsStatus, connected: false });
+      })
+      .onClose((e) => {
+        console.log('WebSocket was closed', e);
+        setWsStatus({ ...wsStatus, connected: false });
       });
   }
 
@@ -53,7 +63,7 @@ export function WebRemoteDisplay({ device, serverUri }) {
     return () => {
       client.close();
     }
-  }, []);
+  }, [serverUri, device]);
 
   return (
     <div className="remote-display">
@@ -64,7 +74,7 @@ export function WebRemoteDisplay({ device, serverUri }) {
               <tr key={y}>
                 {
                   row.map((cell, x) =>
-                    <td key={x} style={({background: cell})} className="remote-display__pixel"></td>
+                    <td key={x} style={({ background: cell })} className="remote-display__pixel"></td>
                   )
                 }
               </tr>
@@ -74,11 +84,16 @@ export function WebRemoteDisplay({ device, serverUri }) {
       </table>
       {
         message.text ?
-          <p className="remote-display__message" style={({color: message.color})}>
+          <p className="remote-display__message" style={({ color: message.color })}>
             {message.text}
           </p> :
           ''
       }
+
+      <div hidden={wsStatus.connected}>
+        WebSocket is not connected on Display.
+        <button onClick={init}>Reconnect</button>
+      </div>
     </div>
   );
 }
