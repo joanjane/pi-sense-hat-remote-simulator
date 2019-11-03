@@ -30,6 +30,7 @@ export function keyPress(source, target, key) {
     target,
     source,
     key,
+    event: 'press',
     timestamp: Date.now()
   };
 }

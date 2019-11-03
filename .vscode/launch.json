@@ -28,6 +28,19 @@
         "SERVER_URI": "ws://localhost:8080",
         "TARGET": "test-web-client"
       }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug joystick",
+      "program": "${workspaceFolder}/scripts/run-joystick-listener.js",
+      "runtimeArgs": [
+        "--experimental-modules"
+      ],
+      "env": {
+        "SERVER_URI": "ws://localhost:8080",
+        "TARGET": "test-web-client"
+      }
     }
   ]
 }
