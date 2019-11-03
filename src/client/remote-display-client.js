@@ -1,17 +1,16 @@
-const { WsClient } = require('./ws-client');
-const { displayMatrixAction, displayMessageAction } = require('./actions');
+import { WsClient } from './ws-client.js';
+import { displayMatrixAction, displayMessageAction } from './actions.js';
 
-module.exports.RemoteDisplayClient = class RemoteDisplayClient {
-  constructor(serverUri, target) {
-    this.client = new WsClient(serverUri);
+export class RemoteDisplayClient {
+  constructor(webSocketFactory, serverUri, target) {
+    this.client = new WsClient(webSocketFactory, serverUri);
     this.target = target;
     this.display = empty();
   }
 
-  connect(onConnect) {
-    this.client
-      .connect()
-      .onOpen(onConnect);
+  async connect(onConnect) {
+    await this.client.connect()
+    this.client.onOpen(onConnect);
   }
 
   showMessage(message, speed, color, done) {

@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import './web-remote-display.css';
 
 import { WsClient } from '../client/ws-client';
+import { browserWebSocketFactory } from '../client/browser-web-socket-provider';
 import { actionTypes } from '../client/actions';
 
 export function WebRemoteDisplay({ device, serverUri }) {
   const [message, setMessage] = useState(emptyMessage());
   const [display, setDisplay] = useState(emptyDisplay());
   const [wsStatus, setWsStatus] = useState({ connected: false });
-  const client = new WsClient(serverUri);
+  const client = new WsClient(browserWebSocketFactory, serverUri);
 
-  function init() {
+  async function init() {
     console.log('Initializing web remote display');
     
     try {
-      client.connect()
+      await client.connect();
     } catch(error) {
       console.error(error);
       setWsStatus({ ...wsStatus, connected: false });

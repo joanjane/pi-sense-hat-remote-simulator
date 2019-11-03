@@ -1,7 +1,6 @@
-const WebSocket = require('./ws');
-
-module.exports.WsClient = class WsClient {
-  constructor(serverUri) {
+export class WsClient {
+  constructor(webSocketFactory, serverUri) {
+    this.webSocketFactory = webSocketFactory;
     this.serverUri = serverUri;
   }
 
@@ -10,8 +9,8 @@ module.exports.WsClient = class WsClient {
   }
 
   connect() {
-    this.ws = new WebSocket(this.serverUri);
-    return this;
+    this.ws = this.webSocketFactory(this.serverUri);
+    return Promise.resolve();
   }
   
   close() {

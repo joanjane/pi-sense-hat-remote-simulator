@@ -1,14 +1,20 @@
 {
   "name": "pi-sense-hat-remote-simulator",
   "version": "1.0.0",
-  "description": "Project to simulate a LED matrix in a web environment for testing purposes",
+  "description": "Project to simulate a LED matrix and joystick in a web environment for testing purposes",
+  "type": "module",
   "scripts": {
     "start": "webpack-dev-server --port 3000",
     "build-web": "webpack -p",
-    "ws-serve": "node scripts/run-server.js",
-    "message": "node scripts/run-message.js",
+    "ws-serve": "node --experimental-modules scripts/run-server.js 8080",
+    "message": "node --experimental-modules scripts/run-message.js ws://localhost:8080 test-web-client",
     "predeploy": "npm run build-web",
     "deploy": "gh-pages -d dist -b gh-pages"
+  },
+  "main": "scripts/run-server.js",
+  "exports": {
+    "./server": "./src/server/index.js",
+    "./client": "./src/client/index.js"
   },
   "repository": {
     "type": "git",
@@ -16,15 +22,16 @@
   },
   "author": "Joan Jané",
   "license": "ISC",
-  "homepage": "https://github.com/joanjane/pi-sense-hat-remote-simulator#readme",
+  "homepage": "https://joanjane.github.io/pi-sense-hat-remote-simulator/",
   "dependencies": {
     "@babel/core": "^7.6.4",
+    "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.6.3",
+    "@babel/runtime": "^7.6.3",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.2.0",
-    "dotenv": "^8.2.0",
     "gh-pages": "^2.1.1",
     "html-webpack-plugin": "^3.2.0",
     "react": "^16.11.0",

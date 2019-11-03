@@ -1,18 +1,19 @@
 import './app.css';
 import React, { useState, useEffect } from 'react';
 import { WsClient } from '../client/ws-client';
+import { browserWebSocketFactory } from '../client/browser-web-socket-provider';
 import { keyPress } from '../client/actions';
 
 export function Joystick({ device, serverUri }) {
   const [state, setState] = useState({
     connected: false
   });
-  const client = new WsClient(serverUri);
+  const client = new WsClient(browserWebSocketFactory, serverUri);
 
-  function init() {
+  async function init() {
     console.log('Initializing web remote display');
     try {
-      client.connect()
+      await client.connect();
     } catch(error) {
       console.error(error);
       setState({ ...state, connected: false });
