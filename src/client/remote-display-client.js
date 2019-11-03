@@ -9,7 +9,7 @@ export class RemoteDisplayClient {
   }
 
   async connect(onConnect) {
-    await this.client.connect()
+    await this.client.connect();
     this.client.onOpen(onConnect);
   }
 
@@ -19,7 +19,18 @@ export class RemoteDisplayClient {
   }
 
   setPixel(x, y, color) {
-    this.display[y][x] = typeof color === 'string' ? color : rgbToHex(color);
+    const renderColor = typeof color === 'string' ? color : rgbToHex(color);
+    const yMin = y === '*' ? 0 : y;
+    const yMax = y === '*' ? 7 : y;
+    const xMin = x === '*' ? 0 : x;
+    const xMax = x === '*' ? 7 : x;
+
+    for (let yIndex = yMin; yIndex <= yMax; yIndex++) {
+      for (let xIndex = xMin; xIndex <= xMax; xIndex++) {
+        this.display[yIndex][xIndex] = renderColor;
+      }
+    }
+
     this.sendMatrix();
   }
 
