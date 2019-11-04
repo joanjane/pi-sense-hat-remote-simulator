@@ -4,8 +4,8 @@
   "description": "Project to simulate a LED matrix and joystick in a web environment for testing purposes",
   "type": "module",
   "scripts": {
-    "start": "webpack-dev-server --port 3000",
-    "build-web": "webpack -p",
+    "start": "webpack-dev-server --config src/web/es5/webpack.config.js --port 3000",
+    "build-web": "webpack --config src/web/es5/webpack.config.js -p --experimental-modules",
     "ws-serve": "node --experimental-modules scripts/run-server.js 8080",
     "message": "node --experimental-modules scripts/run-message.js ws://localhost:8080 test-web-client",
     "joystick": "node --experimental-modules scripts/run-joystick-listener.js ws://localhost:8080 test-web-client",
@@ -16,6 +16,9 @@
   "exports": {
     "./server": "./src/server/index.js",
     "./client": "./src/client/index.js"
+  },
+  "engines": {
+    "node": ">=12"
   },
   "repository": {
     "type": "git",

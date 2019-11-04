@@ -1,0 +1,41 @@
+version: '3.7'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: web.Dockerfile
+    depends_on:
+      - server
+    ports:
+      - "3000:80"
+
+  server:
+    build:
+      context: .
+      dockerfile: server.Dockerfile
+    ports:
+      - "8080:8080"
+      
+  joystick:
+    build:
+      context: .
+      dockerfile: command.Dockerfile
+    depends_on:
+      - server
+    environment:
+      - SERVER_URI=ws://server:8080
+      - TARGET=test-web-client
+    entrypoint: >
+      /bin/sh -c "sleep 10 && node --experimental-modules scripts/run-joystick-listener.js"
+
+  message:
+    build:
+      context: .
+      dockerfile: command.Dockerfile
+    depends_on:
+      - server
+    environment:
+      - SERVER_URI=ws://server:8080
+      - TARGET=test-web-client
+    entrypoint: >
+      /bin/sh -c "sleep 10 && node --experimental-modules scripts/run-message.js"
