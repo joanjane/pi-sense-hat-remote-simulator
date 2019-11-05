@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './web-remote-display.css';
 
-import { WsClient } from '../client/ws-client';
-import { browserWebSocketFactory } from '../client/browser-web-socket-provider';
-import { actionTypes } from '../client/actions';
+import { WsClient } from '../lib/client/ws-client';
+import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
+import { actionTypes } from '../lib/client/actions';
 
 export function WebRemoteDisplay({ device, serverUri }) {
   const [message, setMessage] = useState(emptyMessage());

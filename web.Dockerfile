@@ -15,4 +15,4 @@ COPY . ./
 RUN npm run build-web
 
 EXPOSE $SERVER_PORT
-CMD serve dist/ -s -l $SERVER_PORT
+CMD serve wwwroot/ -s -l $SERVER_PORT

@@ -2,8 +2,9 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
-module.exports = {
-  entry: ['./src/web/index.js'],
+module.exports = (env, argv) => ({
+  entry: ['./web/index.js'],
+  devtool: argv.mode === 'production' ? 'none' : 'eval-source-map',
   module: {
     rules: [
       {
@@ -33,12 +34,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       hash: true,
       inject: 'body',
-      template: './src/web/index.html',
+      template: './web/index.html',
       filename: 'index.html'
     })
   ],
   output: {
-    path: path.resolve(__dirname, '../../../dist'),
+    path: path.resolve(__dirname, '../../wwwroot'),
     filename: 'js/[name].bundle.js'
   },
-};
+});

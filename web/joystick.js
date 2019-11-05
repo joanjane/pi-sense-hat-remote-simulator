@@ -1,8 +1,8 @@
 import './app.css';
 import React, { useState, useEffect } from 'react';
-import { WsClient } from '../client/ws-client';
-import { browserWebSocketFactory } from '../client/browser-web-socket-provider';
-import { keyPress } from '../client/actions';
+import { WsClient } from '../lib/client/ws-client';
+import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
+import { keyPress } from '../lib/client/actions';
 
 export function Joystick({ device, serverUri }) {
   const [state, setState] = useState({

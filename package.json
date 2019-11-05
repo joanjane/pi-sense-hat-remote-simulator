@@ -4,18 +4,25 @@
   "description": "Project to simulate a LED matrix and joystick in a web environment for testing purposes",
   "type": "module",
   "scripts": {
-    "start": "webpack-dev-server --config src/web/es5/webpack.config.js --port 3000",
-    "build-web": "webpack --config src/web/es5/webpack.config.js -p --experimental-modules",
-    "ws-serve": "node --experimental-modules scripts/run-server.js 8080",
-    "message": "node --experimental-modules scripts/run-message.js ws://localhost:8080 test-web-client",
-    "joystick": "node --experimental-modules scripts/run-joystick-listener.js ws://localhost:8080 test-web-client",
+    "start": "webpack-dev-server --config web/es5/webpack.config.js --port 3000",
+    "build-web": "webpack --config web/es5/webpack.config.js -p --experimental-modules",
+    "ws-serve": "node --experimental-modules lib/scripts/run-server.js 8080",
+    "message": "node --experimental-modules lib/scripts/run-message.js ws://localhost:8080 test-web-client",
+    "joystick": "node --experimental-modules lib/scripts/run-joystick-listener.js ws://localhost:8080 test-web-client",
+    "prebuild:lib": "rimraf cjs/client && rimraf cjs/scripts && rimraf cjs/server",
+    "build:lib": "babel lib --out-dir cjs",
+    "ws-serve:cjs": "node cjs/scripts/run-server.js 8080",
+    "message:cjs": "node cjs/scripts/run-message.js ws://localhost:8080 test-web-client",
+    "joystick:cjs": "node cjs/scripts/run-joystick-listener.js ws://localhost:8080 test-web-client",
     "predeploy": "npm run build-web",
-    "deploy": "gh-pages -d dist -b gh-pages"
+    "deploy": "gh-pages -d wwwroot -b gh-pages"
   },
   "main": "scripts/run-server.js",
   "exports": {
-    "./server": "./src/server/index.js",
-    "./client": "./src/client/index.js"
+    "./server": "./lib/server/index.js",
+    "./client": "./lib/client/index.js",
+    "./cjs/server": "./cjs/server/index.js",
+    "./cjs/client": "./cjs/client/index.js"
   },
   "engines": {
     "node": ">=12"
@@ -31,9 +38,11 @@
     "ws": "^7.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.4",
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.0",
+    "@babel/node": "^7.7.0",
     "@babel/plugin-transform-runtime": "^7.6.2",
-    "@babel/preset-env": "^7.6.3",
+    "@babel/preset-env": "^7.7.1",
     "@babel/preset-react": "^7.6.3",
     "@babel/runtime": "^7.6.3",
     "babel-loader": "^8.0.6",
@@ -43,6 +52,7 @@
     "html-webpack-plugin": "^3.2.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
+    "rimraf": "^3.0.0",
     "serve": "^11.2.0",
     "style-loader": "^1.0.0",
     "webpack": "^4.41.2",
