@@ -19,7 +19,7 @@ export class RemoteDisplayClient {
   }
 
   setPixel(x, y, color) {
-    const renderColor = typeof color === 'string' ? color : rgbToHex(color);
+    const renderColor = typeof color === 'string' ? color : rgbToHex(...color);
     const yMin = y === '*' ? 0 : y;
     const yMax = y === '*' ? 7 : y;
     const xMin = x === '*' ? 0 : x;
