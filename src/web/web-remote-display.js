@@ -15,7 +15,7 @@ export function WebRemoteDisplay({ device, serverUri }) {
     console.log('Initializing web remote display');
     
     try {
-      await client.connect();
+      client.connect();
     } catch(error) {
       console.error(error);
       setWsStatus({ ...wsStatus, connected: false });

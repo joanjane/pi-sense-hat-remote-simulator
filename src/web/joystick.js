@@ -13,7 +13,7 @@ export function Joystick({ device, serverUri }) {
   async function init() {
     console.log('Initializing web remote display');
     try {
-      await client.connect();
+      client.connect();
     } catch(error) {
       console.error(error);
       setState({ ...state, connected: false });

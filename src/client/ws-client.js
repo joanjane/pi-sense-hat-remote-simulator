@@ -10,7 +10,6 @@ export class WsClient {
 
   connect() {
     this.ws = this.webSocketFactory(this.serverUri);
-    return Promise.resolve();
   }
   
   close() {

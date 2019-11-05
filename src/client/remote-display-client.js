@@ -6,24 +6,29 @@ export class RemoteDisplayClient {
     this.client = new WsClient(webSocketFactory, serverUri);
     this.target = target;
     this.display = empty();
+    this.displaySize = { x: 8, y: 8 };
   }
 
-  async connect(onConnect) {
-    await this.client.connect();
+  connect(onConnect) {
+    this.client.connect();
     this.client.onOpen(onConnect);
   }
 
+  close() {
+    this.client && this.client.close();
+  }
+
   showMessage(message, speed, color, done) {
-    this.sendMessage(message, speed, color);
+    this.client.send(displayMessageAction(this.target, message, speed, color));
     done && done();
   }
 
   setPixel(x, y, color) {
     const renderColor = typeof color === 'string' ? color : rgbToHex(...color);
     const yMin = y === '*' ? 0 : y;
-    const yMax = y === '*' ? 7 : y;
+    const yMax = y === '*' ? this.displaySize.y - 1 : y;
     const xMin = x === '*' ? 0 : x;
-    const xMax = x === '*' ? 7 : x;
+    const xMax = x === '*' ? this.displaySize.x - 1 : x;
 
     for (let yIndex = yMin; yIndex <= yMax; yIndex++) {
       for (let xIndex = xMin; xIndex <= xMax; xIndex++) {
@@ -31,22 +36,12 @@ export class RemoteDisplayClient {
       }
     }
 
-    this.sendMatrix();
+    this.render();
   }
 
   clear() {
     this.display = empty();
-    this.sendMatrix();
-  }
-
-  sendMatrix() {
-    this.client.send(
-      displayMatrixAction(this.target, this.display));
-  }
-
-  sendMessage(message, speed, color) {
-    this.client.send(
-      displayMessageAction(this.target, message, speed, color));
+    this.render();
   }
 }
 

@@ -10,8 +10,8 @@ export class RemoteJoystick {
     this.onHoldListeners = [];
   }
 
-  async connect() {
-    await this.client.connect();
+  connect() {
+    this.client.connect();
 
     this.client.onOpen(() => {
       this.client.onMessage((event) => {
@@ -32,7 +32,14 @@ export class RemoteJoystick {
             break;
         }
       });
-    })
+    });
+  }
+
+  close() {
+    this.client && this.client.close();
+    this.onPressListeners = [];
+    this.onHoldListeners = [];
+    this.onReleaseListeners = [];
   }
 
   on(event, callback) {
@@ -50,9 +57,4 @@ export class RemoteJoystick {
         throw new Error(`${event} event is not valid. Try with press, hold and release.`);
     }
   }
-}
-
-export function getJoystick(webSocketFactory, serverUri, remoteDeviceId) {
-  const joystick = new RemoteJoystick(webSocketFactory, serverUri, remoteDeviceId);
-  return joystick.connect().then(() => joystick);
 }
