@@ -28,6 +28,9 @@
   "license": "ISC",
   "homepage": "https://joanjane.github.io/pi-sense-hat-remote-simulator/",
   "dependencies": {
+    "ws": "^7.2.0"
+  },
+  "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
@@ -44,8 +47,6 @@
     "style-loader": "^1.0.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0",
-    "ws": "^7.2.0"
-  },
-  "devDependencies": {}
+    "webpack-dev-server": "^3.9.0"
+  }
 }
