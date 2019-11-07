@@ -5,6 +5,8 @@ import { WsClient } from '../lib/client/ws-client';
 import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
 import { actionTypes } from '../lib/client/actions';
 
+const displaySize = { x: 8, y: 8 };
+
 export function WebRemoteDisplay({ device, serverUri }) {
   const [message, setMessage] = useState(emptyMessage());
   const [display, setDisplay] = useState(emptyDisplay());
@@ -13,10 +15,10 @@ export function WebRemoteDisplay({ device, serverUri }) {
 
   async function init() {
     console.log('Initializing web remote display');
-    
+
     try {
       client.connect();
-    } catch(error) {
+    } catch (error) {
       console.error(error);
       setWsStatus({ ...wsStatus, connected: false });
       return;
@@ -45,7 +47,13 @@ export function WebRemoteDisplay({ device, serverUri }) {
 
     console.log(`Received message`, message);
     if (message.type === actionTypes.displayMatrix) {
-      setDisplay(message.matrix);
+      const display = emptyDisplay();
+      message.matrix.forEach((c, i) => {
+        const y = Math.trunc(i / displaySize.x);
+        const x = i % displaySize.x;
+        display[y][x] = c;
+      });
+      setDisplay(display);
     } else if (message.type === actionTypes.displayMessage) {
       showMessage(message.text, message.color);
     }

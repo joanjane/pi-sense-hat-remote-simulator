@@ -12,7 +12,7 @@ RUN npm install
 
 COPY . ./
 
-RUN npm run build-web
+RUN npm run build:web
 
 EXPOSE $SERVER_PORT
 CMD serve wwwroot/ -s -l $SERVER_PORT

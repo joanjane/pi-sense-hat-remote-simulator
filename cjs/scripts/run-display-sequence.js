@@ -18,7 +18,7 @@ var env = {
 };
 var client = new _remoteDisplayClient.RemoteDisplayClient(_nodeWebSocketProvider.nodeWebSocketFactory, env.SERVER_URI, env.TARGET);
 var sequence = [function () {
-  client.setPixel(2, 6, '#aa55dd');
+  client.setPixel(2, 6, [123, 9, 200]);
 }, function () {
   client.setPixel('*', '*', '#2255dd');
 }, function () {
@@ -27,6 +27,8 @@ var sequence = [function () {
   client.setPixel('*', 4, '#bb44ee');
 }, function () {
   client.setPixel(3, '*', '#ff00ff');
+}, function () {
+  display.setPixels(testPixels);
 }, function () {
   client.showMessage("This is a test message ".concat(Date.now()), 0, '#bbaa00');
 }, function () {
@@ -50,3 +52,7 @@ function runSequence(seq) {
     runSequence(rest);
   }, 5000);
 }
+
+var O = '#123fff';
+var X = [123, 200, 30];
+var testPixels = [O, O, O, O, O, O, O, O, O, O, X, O, X, X, O, O, O, O, O, O, X, O, O, O, O, O, O, O, O, O, O, O, O, X, O, O, O, O, X, O, O, X, O, O, O, O, X, O, O, O, X, X, X, X, O, O, O, O, O, O, O, O, O, O];

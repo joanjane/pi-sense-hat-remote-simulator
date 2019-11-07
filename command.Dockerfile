@@ -1,7 +1,7 @@
 FROM node:13-alpine
 
-ENV SERVER_URI
-ENV TARGET
+ENV SERVER_URI=ws://server:8080
+ENV TARGET=test-web-client
 
 WORKDIR /usr/src/app
 

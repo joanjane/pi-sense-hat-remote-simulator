@@ -26,7 +26,7 @@ services:
       - SERVER_URI=ws://server:8080
       - TARGET=test-web-client
     entrypoint: >
-      /bin/sh -c "sleep 10 && node --experimental-modules scripts/run-joystick-listener.js"
+      /bin/sh -c "sleep 10 && node --experimental-modules lib/scripts/run-joystick-listener.js"
 
   message:
     build:
@@ -38,4 +38,4 @@ services:
       - SERVER_URI=ws://server:8080
       - TARGET=test-web-client
     entrypoint: >
-      /bin/sh -c "sleep 10 && node --experimental-modules scripts/run-message.js"
+      /bin/sh -c "sleep 10 && node --experimental-modules lib/scripts/run-display-sequence.js"

@@ -73,6 +73,18 @@ function () {
       this.render();
     }
   }, {
+    key: "setPixels",
+    value: function setPixels(pixels) {
+      if (pixels.length != 64) {
+        throw new Error('pixels must contain 64 elements');
+      }
+
+      this.display = pixels.map(function (color) {
+        return typeof color === 'string' ? color : rgbToHex.apply(void 0, _toConsumableArray(color));
+      });
+      this.render();
+    }
+  }, {
     key: "render",
     value: function render() {
       this.client.send((0, _actions.displayMatrixAction)(this.target, this.display));

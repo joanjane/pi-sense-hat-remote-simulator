@@ -30,7 +30,7 @@ function () {
 
   _createClass(RemoteJoystick, [{
     key: "connect",
-    value: function connect() {
+    value: function connect(onOpen) {
       var _this = this;
 
       this.client.connect();
@@ -65,6 +65,8 @@ function () {
               break;
           }
         });
+
+        onOpen && onOpen();
       });
     }
   }, {
