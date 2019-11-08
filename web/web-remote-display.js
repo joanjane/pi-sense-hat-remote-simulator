@@ -47,13 +47,13 @@ export function WebRemoteDisplay({ device, serverUri }) {
 
     console.log(`Received message`, message);
     if (message.type === actionTypes.displayMatrix) {
-      const display = emptyDisplay();
+      const twoDDisplay = emptyDisplay();
       message.matrix.forEach((c, i) => {
         const y = Math.trunc(i / displaySize.x);
         const x = i % displaySize.x;
-        display[y][x] = c;
+        twoDDisplay[y][x] = c;
       });
-      setDisplay(display);
+      setDisplay(twoDDisplay);
     } else if (message.type === actionTypes.displayMessage) {
       showMessage(message.text, message.color);
     }
