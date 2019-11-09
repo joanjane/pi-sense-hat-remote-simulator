@@ -6,12 +6,12 @@
   "scripts": {
     "start": "webpack-dev-server --config web/es5/webpack.config.js --port 3000",
     "build:web": "webpack --config web/es5/webpack.config.js -p --experimental-modules",
-    "ws-serve": "node --experimental-modules lib/scripts/run-server.js 8080",
+    "ws-serve": "node --experimental-modules lib/scripts/run-server.js 8080 4443",
     "display": "node --experimental-modules lib/scripts/run-display-sequence.js ws://localhost:8080 test-web-client",
     "joystick": "node --experimental-modules lib/scripts/run-joystick-listener.js ws://localhost:8080 test-web-client",
     "prebuild:lib": "rimraf cjs/client && rimraf cjs/scripts && rimraf cjs/server",
     "build:lib": "babel lib --out-dir cjs",
-    "ws-serve:cjs": "node cjs/scripts/run-server.js 8080",
+    "ws-serve:cjs": "node cjs/scripts/run-server.js 8080 4443",
     "display:cjs": "node cjs/scripts/run-display-sequence.js ws://localhost:8080 test-web-client",
     "joystick:cjs": "node cjs/scripts/run-joystick-listener.js ws://localhost:8080 test-web-client",
     "predeploy": "npm run build:web",
@@ -23,9 +23,6 @@
     "./client": "./lib/client/index.js",
     "./cjs/server": "./cjs/server/index.js",
     "./cjs/client": "./cjs/client/index.js"
-  },
-  "engines": {
-    "node": ">=12"
   },
   "repository": {
     "type": "git",
@@ -53,6 +50,7 @@
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "rimraf": "^3.0.0",
+    "self-signed": "^1.3.1",
     "serve": "^11.2.0",
     "style-loader": "^1.0.0",
     "webpack": "^4.41.2",

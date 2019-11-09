@@ -16,26 +16,26 @@ var env = {
   SERVER_URI: process.argv[2] || process.env.SERVER_URI || 'ws://localhost:8080',
   TARGET: process.argv[3] || process.env.TARGET || 'test-web-client'
 };
-var client = new _remoteDisplayClient.RemoteDisplayClient(_nodeWebSocketProvider.nodeWebSocketFactory, env.SERVER_URI, env.TARGET);
+var display = new _remoteDisplayClient.RemoteDisplayClient(_nodeWebSocketProvider.nodeWebSocketFactory, env.SERVER_URI, env.TARGET);
 var sequence = [function () {
-  client.setPixel(2, 6, [123, 9, 200]);
+  display.setPixel(2, 6, [123, 9, 200]);
 }, function () {
-  client.setPixel('*', '*', '#2255dd');
+  display.setPixel('*', '*', '#2255dd');
 }, function () {
-  client.clear();
+  display.clear();
 }, function () {
-  client.setPixel('*', 4, '#bb44ee');
+  display.setPixel('*', 4, '#bb44ee');
 }, function () {
-  client.setPixel(3, '*', '#ff00ff');
+  display.setPixel(3, '*', '#ff00ff');
 }, function () {
   display.setPixels(testPixels);
 }, function () {
-  client.showMessage("This is a test message ".concat(Date.now()), 0, '#bbaa00');
+  display.showMessage("This is a test message ".concat(Date.now()), 0, '#bbaa00');
 }, function () {
   console.log('Finished'), process.exit(0);
 }];
 console.log('Starting...');
-client.connect(function () {
+display.connect(function () {
   console.log('Sending sequence...');
   runSequence(sequence);
 });
@@ -55,4 +55,4 @@ function runSequence(seq) {
 
 var O = '#123fff';
 var X = [123, 200, 30];
-var testPixels = [O, O, O, O, O, O, O, O, O, O, X, O, X, X, O, O, O, O, O, O, X, O, O, O, O, O, O, O, O, O, O, O, O, X, O, O, O, O, X, O, O, X, O, O, O, O, X, O, O, O, X, X, X, X, O, O, O, O, O, O, O, O, O, O];
+var testPixels = [O, O, O, O, O, O, O, O, O, O, X, O, O, X, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, X, O, O, O, O, X, O, O, X, O, O, O, O, X, O, O, O, X, X, X, X, O, O, O, O, O, O, O, O, O, O];

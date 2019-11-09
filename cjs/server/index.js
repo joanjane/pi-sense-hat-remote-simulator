@@ -7,41 +7,55 @@ exports.run = run;
 
 var _ws = _interopRequireDefault(require("ws"));
 
+var _fs = _interopRequireDefault(require("fs"));
+
+var _http = _interopRequireDefault(require("http"));
+
+var _https = _interopRequireDefault(require("https"));
+
+var _selfSigned = _interopRequireDefault(require("self-signed"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function run(port) {
-  console.log('Starting server on port ' + port);
+function run(port, securePort) {
+  port = port || 80;
+  securePort = securePort || 443;
+  createSslCerts();
+  console.log("Starting server on port ws://*:".concat(port, "  wss://*:").concat(securePort));
+
+  var httpsServer = _https["default"].createServer({
+    key: _fs["default"].readFileSync('./dev-cert.key'),
+    cert: _fs["default"].readFileSync('./dev-cert.cert')
+  }, handleRequest);
+
+  var httpServer = _http["default"].createServer(handleRequest);
+
+  var ws = new _ws["default"].Server({
+    server: httpServer
+  });
+  broadcastWebsockets(ws);
   var wss = new _ws["default"].Server({
-    port: port,
-    perMessageDeflate: {
-      zlibDeflateOptions: {
-        // See zlib defaults.
-        chunkSize: 1024,
-        memLevel: 7,
-        level: 3
-      },
-      zlibInflateOptions: {
-        chunkSize: 10 * 1024
-      },
-      // Other options settable:
-      clientNoContextTakeover: true,
-      // Defaults to negotiated value.
-      serverNoContextTakeover: true,
-      // Defaults to negotiated value.
-      serverMaxWindowBits: 10,
-      // Defaults to negotiated value.
-      // Below options specified as default values.
-      concurrencyLimit: 10,
-      // Limits zlib concurrency for perf.
-      threshold: 1024 // Size (in bytes) below which messages
-      // should not be compressed.
+    server: httpsServer
+  });
+  broadcastWebsockets(wss);
+  httpServer.listen(port);
+  httpsServer.listen(securePort);
+}
 
-    }
-  }); // Listen for Web Socket connections.
+;
 
+function handleRequest() {
+  return function (req, res) {
+    console.log("".concat(req.method, ": ").concat(req.url));
+    res.write('/');
+    res.end();
+  };
+}
+
+function broadcastWebsockets(wss) {
   wss.on('connection', function (socket) {
     socket.on('message', function (msg) {
-      console.log('A message was received!', msg);
+      console.log("[".concat(new Date().toISOString(), "] Message received"), msg);
       wss.clients.forEach(function each(client) {
         if (client !== wss && client.readyState === _ws["default"].OPEN) {
           client.send(msg);
@@ -51,4 +65,37 @@ function run(port) {
   });
 }
 
-;
+function createSslCerts() {
+  if (!_fs["default"].existsSync('dev-cert.key') || !_fs["default"].existsSync('dev-cert.cert')) {
+    console.log('Generating self-signed certificate...');
+    var certOptions = (0, _selfSigned["default"])({
+      name: 'localhost',
+      city: 'Test',
+      state: 'Test',
+      organization: 'Test',
+      unit: 'Test'
+    }, {
+      alt: [{
+        type: 2,
+        value: 'localhost'
+      }, {
+        type: 2,
+        value: process.env.CNAME
+      }, {
+        type: 7,
+        ip: '127.0.0.1'
+      }],
+      keySize: 2048,
+      serial: '329485',
+      pkcs7: true
+    });
+
+    _fs["default"].writeFileSync('dev-cert.key', certOptions["private"], {
+      encoding: 'utf-8'
+    });
+
+    _fs["default"].writeFileSync('dev-cert.cert', certOptions.cert, {
+      encoding: 'utf-8'
+    });
+  }
+}

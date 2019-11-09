@@ -3,3 +3,5 @@
 dist/
 wwwroot/
 .vs
+*.key
+*.cert

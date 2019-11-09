@@ -1,6 +1,7 @@
 FROM node:13-alpine
 
-ENV SERVER_PORT 8080
+ENV WS_SERVER_PORT 80
+ENV WS_SERVER_SECURE_PORT 443
 
 WORKDIR /usr/src/app
 
@@ -10,5 +11,6 @@ RUN npm install
 
 COPY . ./
 
-EXPOSE $SERVER_PORT
-CMD npm run ws-serve
+EXPOSE $WS_SERVER_PORT
+EXPOSE $WS_SERVER_SECURE_PORT
+CMD node --experimental-modules lib/scripts/run-server.js $WS_SERVER_PORT $WS_SERVER_SECURE_PORT

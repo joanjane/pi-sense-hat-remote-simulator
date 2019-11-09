@@ -8,7 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "Debug message",
-      "program": "${workspaceFolder}/scripts/run-message.js",
+      "program": "${workspaceFolder}/lib/scripts/run-message.js",
       "runtimeArgs": [
         "--experimental-modules"
       ],
@@ -20,7 +20,7 @@
       "type": "node",
       "request": "launch",
       "name": "Debug server",
-      "program": "${workspaceFolder}/scripts/run-server.js",
+      "program": "${workspaceFolder}/lib/scripts/run-server.js",
       "runtimeArgs": [
         "--experimental-modules"
       ],
@@ -33,7 +33,7 @@
       "type": "node",
       "request": "launch",
       "name": "Debug joystick",
-      "program": "${workspaceFolder}/scripts/run-joystick-listener.js",
+      "program": "${workspaceFolder}/lib/scripts/run-joystick-listener.js",
       "runtimeArgs": [
         "--experimental-modules"
       ],

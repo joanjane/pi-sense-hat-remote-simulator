@@ -66,7 +66,7 @@ function () {
 
       for (var yIndex = yMin; yIndex <= yMax; yIndex++) {
         for (var xIndex = xMin; xIndex <= xMax; xIndex++) {
-          this.display[yIndex][xIndex] = renderColor;
+          this.display[yIndex * this.displaySize.x + xIndex] = renderColor;
         }
       }
 
@@ -75,7 +75,7 @@ function () {
   }, {
     key: "setPixels",
     value: function setPixels(pixels) {
-      if (pixels.length != 64) {
+      if (pixels.length != this.displaySize.x * this.displaySize.y) {
         throw new Error('pixels must contain 64 elements');
       }
 
@@ -114,5 +114,5 @@ function rgbToHex(r, g, b) {
 var O = '#000000';
 
 var empty = function empty() {
-  return [[O, O, O, O, O, O, O, O], [O, O, O, O, O, O, O, O], [O, O, O, O, O, O, O, O], [O, O, O, O, O, O, O, O], [O, O, O, O, O, O, O, O], [O, O, O, O, O, O, O, O], [O, O, O, O, O, O, O, O], [O, O, O, O, O, O, O, O]];
+  return [O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O, O];
 };
