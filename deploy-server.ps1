@@ -4,19 +4,21 @@ param(
     $acrPassword,
     $resourceGroup,
     $aciName,
-    $imgName = "websocket-broadcast"
+    $imgName = "websocket-broadcast",
+    $tag = "latest"
 )
 
 $registry = "$($acrName).azurecr.io"
-$fullImgName = "$($registry)/$($imgName)"
+$fullImgName = "$($registry)/$($imgName):$($tag)"
+
 docker build -t $fullImgName -f server.Dockerfile .
-# docker run -e "WS_SERVER_PORT=8081" -p 8081:8081 $fullImgName
+# docker run -p 8080:80 -p 4443:443 $fullImgName
 
 az acr login --name $acrName --username $acrUsername --password $acrPassword
 
 $registry = "$($acrName).azurecr.io"
 docker login $registry
-docker push "$($fullImgName):latest"
+docker push $fullImgName
 
-az container create --resource-group $resourceGroup 
---name $aciName --image "$($fullImgName):latest" --restart-policy OnFailure --environment-variables 'WS_SERVER_PORT'='80' --dns-name-label "jjane-$($imgName)"
+az container delete --name $aciName --resource-group $resourceGroup --yes
+az container create --name $aciName --resource-group $resourceGroup --image $fullImgName --ports 80 443 --registry-login-server $registry --registry-username $acrUsername --registry-password $acrPassword --dns-name-label $aciName --environment-variables CNAME="$($aciName).westeurope.azurecontainer.io" --location westeurope
