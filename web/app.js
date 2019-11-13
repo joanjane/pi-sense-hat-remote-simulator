@@ -2,6 +2,7 @@ import './app.css';
 import React, { useState } from 'react';
 import { WebRemoteDisplay } from './web-remote-display';
 import { Joystick } from './joystick';
+import { SampleSequence } from './sample-sequence';
 import { UserData } from './user-data';
 
 export function App() {
@@ -51,6 +52,8 @@ export function App() {
       }
 
       <Joystick serverUri={state.serverUri} device={state.device} />
+      <SampleSequence serverUri={state.serverUri} device={state.device} />
+      
     </div>
   );
 }

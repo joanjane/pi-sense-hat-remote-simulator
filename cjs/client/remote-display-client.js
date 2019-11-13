@@ -53,7 +53,9 @@ function () {
     key: "showMessage",
     value: function showMessage(message, speed, color, done) {
       this.client.send((0, _actions.displayMessageAction)(this.target, message, speed, color));
-      done && done();
+      setTimeout(function () {
+        return done && done();
+      }, speed * 1000);
     }
   }, {
     key: "setPixel",

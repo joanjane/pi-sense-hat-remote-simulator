@@ -22,40 +22,46 @@ function run(port, securePort) {
   securePort = securePort || 443;
   createSslCerts();
   console.log("Starting server on port ws://*:".concat(port, "  wss://*:").concat(securePort));
+  var wss = new _ws["default"].Server({
+    noServer: true
+  });
+  broadcastWebsockets(wss);
+
+  var httpServer = _http["default"].createServer(handleRequest);
 
   var httpsServer = _https["default"].createServer({
     key: _fs["default"].readFileSync('./dev-cert.key'),
     cert: _fs["default"].readFileSync('./dev-cert.cert')
   }, handleRequest);
 
-  var httpServer = _http["default"].createServer(handleRequest);
-
-  var ws = new _ws["default"].Server({
-    server: httpServer
+  httpServer.on('upgrade', function (request, socket, head) {
+    return upgrade(wss, request, socket, head);
   });
-  broadcastWebsockets(ws);
-  var wss = new _ws["default"].Server({
-    server: httpsServer
+  httpsServer.on('upgrade', function (request, socket, head) {
+    return upgrade(wss, request, socket, head);
   });
-  broadcastWebsockets(wss);
   httpServer.listen(port);
   httpsServer.listen(securePort);
 }
 
 ;
 
-function handleRequest() {
-  return function (req, res) {
-    console.log("".concat(req.method, ": ").concat(req.url));
-    res.write('/');
-    res.end();
-  };
+function handleRequest(req, res) {
+  console.log("".concat(req.method, ": ").concat(req.url));
+  res.write(req.url);
+  res.end();
+}
+
+function upgrade(wss, request, socket, head) {
+  wss.handleUpgrade(request, socket, head, function done(ws) {
+    wss.emit('connection', ws, request);
+  });
 }
 
 function broadcastWebsockets(wss) {
   wss.on('connection', function (socket) {
     socket.on('message', function (msg) {
-      console.log("[".concat(new Date().toISOString(), "] Message received"), msg);
+      console.log("[".concat(new Date().toISOString(), "] Message received\n"), msg);
       wss.clients.forEach(function each(client) {
         if (client !== wss && client.readyState === _ws["default"].OPEN) {
           client.send(msg);

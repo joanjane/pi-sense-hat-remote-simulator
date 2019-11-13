@@ -1,10 +1,18 @@
 export class UserData {
   get() {
-    const data = sessionStorage.getItem('userData');
-    if (!data) {
-      return null;
+    let userData = sessionStorage['userData'] ?
+      JSON.parse(sessionStorage.getItem('userData'))
+      : {};
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('server_uri')) {
+      userData['serverUri'] = urlParams.get('server_uri');
     }
-    return JSON.parse(data);
+
+    if (urlParams.has('device')) {
+      userData['device'] = urlParams.get('device');
+    }
+    return userData;
   }
 
   set(value) {
