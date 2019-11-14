@@ -32,16 +32,7 @@ export function SampleSequence({ device, serverUri }) {
 
   return (
     <div hidden={!state.connected}>
-      <button onClick={() => flashTestSequence(display)}>Sample</button>
+      <button className="button" onClick={() => flashTestSequence(display)}>Sample</button>
     </div>
   );
 }
-
-
-const keyMap = {
-  'ArrowLeft': 'left',
-  'ArrowUp': 'up',
-  'ArrowRight': 'right',
-  'ArrowDown': 'down',
-  'Enter': 'click'
-};

@@ -61,7 +61,7 @@ export function Joystick({ device, serverUri }) {
   return (
     <div hidden={state.connected}>
       WebSocket is not connected on Joystick.
-      <button onClick={init}>Reconnect</button>
+      <button className="button" onClick={init}>Reconnect</button>
     </div>
   );
 }

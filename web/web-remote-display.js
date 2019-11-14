@@ -109,7 +109,7 @@ export function WebRemoteDisplay({ device, serverUri }) {
 
       <div hidden={wsStatus.connected}>
         WebSocket is not connected on Display.
-        <button onClick={init}>Reconnect</button>
+        <button className="button" onClick={init}>Reconnect</button>
       </div>
     </div>
   );

@@ -13,6 +13,13 @@ html {
   display: flex;
   flex-direction: column;
   margin: 1rem;
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  .form-group {
+    margin: 0 0 1rem;
+  }
 }
 
 .form-group label {
@@ -26,4 +33,17 @@ html {
   color: var(--primary-color-alt);
   font-family: var(--font-family);
   padding: .4rem;
+}
+
+.button {
+  background: transparent;
+  border: 1px solid var(--primary-color-alt);
+  color: var(--primary-color-alt);
+  font-family: var(--font-family);
+  padding: .4rem;
+  cursor: pointer;
+}
+
+.button:hover {
+  border-width: 2px;
 }

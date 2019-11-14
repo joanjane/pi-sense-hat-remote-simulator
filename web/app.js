@@ -44,6 +44,10 @@ export function App() {
             placeholder="Device ID"
           />
         </div>
+        <div className="form-group">
+          <SampleSequence serverUri={state.serverUri} device={state.device} />
+        </div>
+
       </div>
       {
         state.serverUri && state.device ?
@@ -52,7 +56,6 @@ export function App() {
       }
 
       <Joystick serverUri={state.serverUri} device={state.device} />
-      <SampleSequence serverUri={state.serverUri} device={state.device} />
       
     </div>
   );
