@@ -28,14 +28,26 @@ Object.keys(_wsClient).forEach(function (key) {
   });
 });
 
-var _remoteDisplayClient = require("./remote-display-client.js");
+var _remoteDisplay = require("./remote-display.js");
 
-Object.keys(_remoteDisplayClient).forEach(function (key) {
+Object.keys(_remoteDisplay).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   Object.defineProperty(exports, key, {
     enumerable: true,
     get: function get() {
-      return _remoteDisplayClient[key];
+      return _remoteDisplay[key];
+    }
+  });
+});
+
+var _remoteEnvironment = require("./remote-environment.js");
+
+Object.keys(_remoteEnvironment).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _remoteEnvironment[key];
     }
   });
 });
@@ -48,6 +60,18 @@ Object.keys(_remoteJoystick).forEach(function (key) {
     enumerable: true,
     get: function get() {
       return _remoteJoystick[key];
+    }
+  });
+});
+
+var _remoteMotion = require("./remote-motion.js");
+
+Object.keys(_remoteMotion).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _remoteMotion[key];
     }
   });
 });

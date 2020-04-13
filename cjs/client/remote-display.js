@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.RemoteDisplayClient = void 0;
+exports.RemoteDisplay = void 0;
 
 var _wsClient = require("./ws-client.js");
 
@@ -23,11 +23,11 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var RemoteDisplayClient =
+var RemoteDisplay =
 /*#__PURE__*/
 function () {
-  function RemoteDisplayClient(webSocketFactory, serverUri, target) {
-    _classCallCheck(this, RemoteDisplayClient);
+  function RemoteDisplay(webSocketFactory, serverUri, target) {
+    _classCallCheck(this, RemoteDisplay);
 
     this.client = new _wsClient.WsClient(webSocketFactory, serverUri);
     this.target = target;
@@ -38,7 +38,7 @@ function () {
     };
   }
 
-  _createClass(RemoteDisplayClient, [{
+  _createClass(RemoteDisplay, [{
     key: "connect",
     value: function connect(onConnect) {
       this.client.connect();
@@ -99,10 +99,10 @@ function () {
     }
   }]);
 
-  return RemoteDisplayClient;
+  return RemoteDisplay;
 }();
 
-exports.RemoteDisplayClient = RemoteDisplayClient;
+exports.RemoteDisplay = RemoteDisplay;
 
 function rgbToHex(r, g, b) {
   function componentToHex(c) {

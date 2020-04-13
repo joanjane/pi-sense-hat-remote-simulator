@@ -2,39 +2,36 @@ import './app.css';
 import React, { useState, useEffect } from 'react';
 import { WsClient } from '../lib/client/ws-client';
 import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
-import { keyPress } from '../lib/client/actions';
+import { keyPressAction } from '../lib/client/actions';
 
 export function Joystick({ device, serverUri }) {
-  const [state, setState] = useState({
-    connected: false
-  });
-  const client = new WsClient(browserWebSocketFactory, serverUri);
-
-  async function init() {
-    console.log('Initializing web remote display');
+  const [connected, setConnected] = useState(false);
+  const [client, setClient] = useState();
+  
+  function init() {
+    const wsClient = new WsClient(browserWebSocketFactory, serverUri);
+    setClient(wsClient);
     try {
-      client.connect();
-    } catch(error) {
+      wsClient.connect();
+    } catch (error) {
       console.error(error);
-      setState({ ...state, connected: false });
+      setConnected(false);
       return;
     }
 
-    client
+    wsClient
       .onOpen(() => {
         window.addEventListener('keydown', handleKeyDown);
-        console.log(`WS state: ${client.readyState}`);
-        setState({ ...state, connected: true });
+        setConnected(true);
       })
       .onError((e) => {
         console.log('Error on WebSocket', e);
-        setState({ ...state, connected: false });
+        setConnected(false);
       })
       .onClose((e) => {
         console.log('WebSocket was closed', e);
-        setState({ ...state, connected: false });
+        setConnected(false);
       });
-    console.log(`WS state: ${client.readyState}`);
   }
 
   function clean() {
@@ -47,7 +44,7 @@ export function Joystick({ device, serverUri }) {
 
     const key = keyMap[e.key];
     console.log(`Send key ${key} ${serverUri}`);
-    client.send(keyPress(device, 'test-server', key));
+    client.send(keyPressAction(device, 'test-server', key));
   }
 
   useEffect(() => {
@@ -56,10 +53,10 @@ export function Joystick({ device, serverUri }) {
     return () => {
       clean();
     };
-  }, [serverUri, device]);
+  }, [serverUri, device, setConnected, setClient]);
 
   return (
-    <div hidden={state.connected}>
+    <div hidden={connected}>
       WebSocket is not connected on Joystick.
       <button className="button" onClick={init}>Reconnect</button>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RemoteDisplayClient } from '../lib/client/remote-display-client';
+import { RemoteDisplay } from '../lib/client/remote-display';
 import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
 import { flashTestSequence } from '../lib/scripts/flash-test-sequence';
 
@@ -8,9 +8,8 @@ export function SampleSequence({ device, serverUri }) {
     connected: false
   });
 
-  let display = new RemoteDisplayClient(browserWebSocketFactory, serverUri, device);
+  let display = new RemoteDisplay(browserWebSocketFactory, serverUri, device);
   async function init() {
-    console.log('Initializing web remote display');
     try {
       display.connect(() => {
         setState({ ...state, connected: true });

@@ -4,6 +4,8 @@ import { WebRemoteDisplay } from './web-remote-display';
 import { Joystick } from './joystick';
 import { SampleSequence } from './sample-sequence';
 import { UserData } from './user-data';
+import { EnvironmentSensors } from './environment-sensors';
+import { MotionSensors } from './motion-sensors';
 
 export function App() {
   const userData = new UserData();
@@ -47,16 +49,19 @@ export function App() {
         <div className="form-group">
           <SampleSequence serverUri={state.serverUri} device={state.device} />
         </div>
-
       </div>
-      {
-        state.serverUri && state.device ?
-          <WebRemoteDisplay serverUri={state.serverUri} device={state.device} />
-          : ''
-      }
 
       <Joystick serverUri={state.serverUri} device={state.device} />
-      
+      <div className="d-flex">
+        <div>
+          <WebRemoteDisplay serverUri={state.serverUri} device={state.device} />
+        </div>
+        <div className="d-flex">
+          <EnvironmentSensors serverUri={state.serverUri} device={state.device} />
+          <MotionSensors serverUri={state.serverUri} device={state.device} />
+        </div>
+      </div>
+
     </div>
   );
 }
