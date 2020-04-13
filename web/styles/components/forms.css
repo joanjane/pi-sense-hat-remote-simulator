@@ -1,0 +1,19 @@
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  justify-content: flex-end;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: .2rem;
+}
+
+.form-control {
+  background: transparent;
+  border: 1px solid var(--primary-color-alt);
+  color: var(--primary-color-alt);
+  font-family: var(--font-family);
+  padding: .4rem;
+}

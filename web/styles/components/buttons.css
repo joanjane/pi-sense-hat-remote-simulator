@@ -1,0 +1,12 @@
+.button {
+  background: transparent;
+  border: 1px solid var(--primary-color-alt);
+  color: var(--primary-color-alt);
+  font-family: var(--font-family);
+  padding: .4rem;
+  cursor: pointer;
+}
+
+.button:hover {
+  border-width: 2px;
+}

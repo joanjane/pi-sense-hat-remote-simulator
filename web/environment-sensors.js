@@ -1,8 +1,8 @@
-import './app.css';
 import React, { useState, useEffect } from 'react';
 import { WsClient } from '../lib/client/ws-client';
 import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
 import { updateEnvironmentStatusAction } from '../lib/client/actions';
+import { Collapsable } from './shared/collapsable';
 
 export function EnvironmentSensors({ device, serverUri }) {
   const [connected, setConnected] = useState(false);
@@ -58,8 +58,8 @@ export function EnvironmentSensors({ device, serverUri }) {
   }
 
   return (
-    <>
-      <div>
+    <Collapsable title="Environment">
+      <div className="d-flex flex-direction-column p-3">
         <div className="form-group">
           <label htmlFor="temperature">Temperature ({status.temperature}° C)</label>
           <input type="range" id="temperature" name="temperature" min={-40} max={120}
@@ -78,6 +78,6 @@ export function EnvironmentSensors({ device, serverUri }) {
             value={status.humidity} onChange={handleRangeChange} onBlur={(e) => sendStatus(e)} />
         </div>
       </div>
-    </>
+    </Collapsable>
   );
 }

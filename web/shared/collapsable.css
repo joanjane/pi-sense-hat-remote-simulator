@@ -1,0 +1,49 @@
+.collapsable {
+  background: var(--primary-color);
+  color: var(--primary-color-alt);
+  width: 100%;
+}
+
+.collapsable__title {
+  font-family: inherit;
+  font-weight: bold;
+  border: none;
+  border-bottom: 1px solid var(--primary-color);
+  background: var(--secondary-color);
+  color: var(--secondary-color-alt);
+  font-size: inherit;
+  display: block;
+  width: 100%;
+  text-align: start;
+  padding: .75rem .5rem;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.collapsable__content {
+  height: auto;
+  border-color: var(--secondary-color);
+  border-style: solid;
+  border-width: 2px;
+  border-top-width: 0;
+}
+
+.is-collapsed .collapsable__content {
+  height: 0;
+  border-width: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.collapsable__icon--expand {
+  display: none;
+}
+
+.is-collapsed .collapsable__icon--expand {
+  display: inline;
+}
+
+.is-collapsed .collapsable__icon--collapse {
+  display: none;
+}

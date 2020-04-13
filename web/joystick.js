@@ -1,4 +1,3 @@
-import './app.css';
 import React, { useState, useEffect } from 'react';
 import { WsClient } from '../lib/client/ws-client';
 import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
