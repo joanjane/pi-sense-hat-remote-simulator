@@ -4,10 +4,12 @@ import './web-remote-display.css';
 import { WsClient } from '../lib/client/ws-client';
 import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
 import { actionTypes } from '../lib/client/actions';
+import { useCurrentWsInfo } from './shared/ws-info-hook';
 
 const displaySize = { x: 8, y: 8 };
 
-export function WebRemoteDisplay({ device, serverUri }) {
+export function WebRemoteDisplay() {
+  const { device, serverUri } = useCurrentWsInfo();
   const [message, setMessage] = useState(emptyMessage());
   const [display, setDisplay] = useState(emptyDisplay());
   const [connected, setConnected] = useState(false);

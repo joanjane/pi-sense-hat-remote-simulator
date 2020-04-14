@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { RemoteDisplay } from '../lib/client/remote-display';
 import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
 import { flashTestSequence } from '../lib/scripts/flash-test-sequence';
+import { useCurrentWsInfo } from './shared/ws-info-hook';
 
-export function SampleSequence({ device, serverUri }) {
+export function SampleSequence() {
+  const { device, serverUri } = useCurrentWsInfo();
+
   const [state, setState] = useState({
     connected: false
   });

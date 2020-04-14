@@ -3,8 +3,11 @@ import { WsClient } from '../lib/client/ws-client';
 import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
 import { updateEnvironmentStatusAction } from '../lib/client/actions';
 import { Collapsable } from './shared/collapsable';
+import { useCurrentWsInfo } from './shared/ws-info-hook';
 
-export function EnvironmentSensors({ device, serverUri }) {
+export function EnvironmentSensors() {
+  const { device, serverUri } = useCurrentWsInfo();
+
   const [connected, setConnected] = useState(false);
   const [status, setStatus] = useState({
     temperature: 21,

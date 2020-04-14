@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { WsClient } from '../lib/client/ws-client';
 import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
 import { keyPressAction } from '../lib/client/actions';
+import { useCurrentWsInfo } from './shared/ws-info-hook';
 
-export function Joystick({ device, serverUri }) {
+export function Joystick() {
+  const { device, serverUri } = useCurrentWsInfo();
+
   const [connected, setConnected] = useState(false);
   const [client, setClient] = useState();
   

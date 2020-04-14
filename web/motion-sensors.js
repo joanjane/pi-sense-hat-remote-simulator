@@ -3,8 +3,11 @@ import { WsClient } from '../lib/client/ws-client';
 import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
 import { updateMotionStatusAction } from '../lib/client/actions';
 import { Collapsable } from './shared/collapsable';
+import { useCurrentWsInfo } from './shared/ws-info-hook';
 
-export function MotionSensors({ device, serverUri }) {
+export function MotionSensors() {
+  const { device, serverUri } = useCurrentWsInfo();
+
   const [client, setClient] = useState();
   const [connected, setConnected] = useState(false);
   const [status, setStatus] = useState({
