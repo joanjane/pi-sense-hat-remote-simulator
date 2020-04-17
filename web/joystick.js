@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { WsClient } from '../lib/client/ws-client';
 import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
 import { keyPressAction } from '../lib/client/actions';
-import { useCurrentWsInfo } from './shared/ws-info-hook';
+import { SettingsContext } from './shared/server-settings-context';
 
 export function Joystick() {
-  const { device, serverUri } = useCurrentWsInfo();
+  const { serverSettings } = useContext(SettingsContext);
 
   const [connected, setConnected] = useState(false);
   const [client, setClient] = useState();
   
   function init() {
-    const wsClient = new WsClient(browserWebSocketFactory, serverUri);
+    const wsClient = new WsClient(browserWebSocketFactory, serverSettings.serverUri);
     setClient(wsClient);
     try {
       wsClient.connect();
@@ -45,8 +45,8 @@ export function Joystick() {
     if (!Object.keys(keyMap).some(k => e.key === k)) return;
 
     const key = keyMap[e.key];
-    console.log(`Send key ${key} ${serverUri}`);
-    client.send(keyPressAction(device, 'test-server', key));
+    console.log(`Send key ${key} ${serverSettings.serverUri}`);
+    client.send(keyPressAction(serverSettings.device, 'test-server', key));
   }
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export function Joystick() {
     return () => {
       clean();
     };
-  }, [serverUri, device, setConnected, setClient]);
+  }, [serverSettings.serverUri, serverSettings.device, setConnected, setClient]);
 
   return (
     <div hidden={connected}>

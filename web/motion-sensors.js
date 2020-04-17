@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { WsClient } from '../lib/client/ws-client';
 import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
 import { updateMotionStatusAction } from '../lib/client/actions';
 import { Collapsable } from './shared/collapsable';
-import { useCurrentWsInfo } from './shared/ws-info-hook';
+import { SettingsContext } from './shared/server-settings-context';
 
 export function MotionSensors() {
-  const { device, serverUri } = useCurrentWsInfo();
+  const { serverSettings } = useContext(SettingsContext);
 
   const [client, setClient] = useState();
   const [connected, setConnected] = useState(false);
@@ -18,7 +18,7 @@ export function MotionSensors() {
   });
 
   function init() {
-    const wsClient = new WsClient(browserWebSocketFactory, serverUri);
+    const wsClient = new WsClient(browserWebSocketFactory, serverSettings.serverUri);
     setClient(wsClient);
     try {
       wsClient.connect();
@@ -42,10 +42,10 @@ export function MotionSensors() {
 
   useEffect(() => {
     init();
-  }, [serverUri, device, setConnected, setClient]);
+  }, [serverSettings.serverUri, serverSettings.device, setConnected, setClient]);
 
   const sendStatus = () => {
-    client.send(updateMotionStatusAction(device, 'test-server', {
+    client.send(updateMotionStatusAction(serverSettings.device, 'test-server', {
       acceleration: toVector(status.acceleration),
       gyroscope: toVector(status.gyroscope),
       orientation: toVector(status.orientation),

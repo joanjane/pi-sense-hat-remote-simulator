@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { WsClient } from '../lib/client/ws-client';
 import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
 import { updateEnvironmentStatusAction } from '../lib/client/actions';
 import { Collapsable } from './shared/collapsable';
-import { useCurrentWsInfo } from './shared/ws-info-hook';
+import { SettingsContext } from './shared/server-settings-context';
 
 export function EnvironmentSensors() {
-  const { device, serverUri } = useCurrentWsInfo();
+  const { serverSettings } = useContext(SettingsContext);
 
   const [connected, setConnected] = useState(false);
   const [status, setStatus] = useState({
@@ -17,7 +17,7 @@ export function EnvironmentSensors() {
   const [client, setClient] = useState();
 
   function init() {
-    const wsClient = new WsClient(browserWebSocketFactory, serverUri);
+    const wsClient = new WsClient(browserWebSocketFactory, serverSettings.serverUri);
     setClient(wsClient);
     try {
       wsClient.connect();
@@ -41,10 +41,10 @@ export function EnvironmentSensors() {
 
   useEffect(() => {
     init();
-  }, [serverUri, device, setConnected, setClient]);
+  }, [serverSettings.serverUri, serverSettings.device, setConnected, setClient]);
 
   const sendStatus = () => {
-    client.send(updateEnvironmentStatusAction(device, 'test-server', status));
+    client.send(updateEnvironmentStatusAction(serverSettings.device, 'test-server', status));
   }
 
   const handleRangeChange = (e) => {

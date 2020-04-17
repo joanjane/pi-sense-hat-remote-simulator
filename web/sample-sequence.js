@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { RemoteDisplay } from '../lib/client/remote-display';
 import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
 import { flashTestSequence } from '../lib/scripts/flash-test-sequence';
-import { useCurrentWsInfo } from './shared/ws-info-hook';
+import { SettingsContext } from './shared/server-settings-context';
 
 export function SampleSequence() {
-  const { device, serverUri } = useCurrentWsInfo();
+  const { serverSettings } = useContext(SettingsContext);
 
   const [state, setState] = useState({
     connected: false
   });
 
-  let display = new RemoteDisplay(browserWebSocketFactory, serverUri, device);
+  let display = new RemoteDisplay(browserWebSocketFactory, serverSettings.serverUri, serverSettings.device);
   async function init() {
     try {
       display.connect(() => {
@@ -30,7 +30,7 @@ export function SampleSequence() {
     return () => {
       display && display.close();
     };
-  }, [serverUri, device]);
+  }, [serverSettings.serverUri, serverSettings.device]);
 
   return (
     <div hidden={!state.connected}>

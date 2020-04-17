@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './web-remote-display.css';
 
 import { WsClient } from '../lib/client/ws-client';
 import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
 import { actionTypes } from '../lib/client/actions';
-import { useCurrentWsInfo } from './shared/ws-info-hook';
+import { SettingsContext } from './shared/server-settings-context';
 
 const displaySize = { x: 8, y: 8 };
 
 export function WebRemoteDisplay() {
-  const { device, serverUri } = useCurrentWsInfo();
+  const { serverSettings } = useContext(SettingsContext);
   const [message, setMessage] = useState(emptyMessage());
   const [display, setDisplay] = useState(emptyDisplay());
   const [connected, setConnected] = useState(false);
   const [client, setClient] = useState(false);
   
   function init() {
-    const wsClient = new WsClient(browserWebSocketFactory, serverUri);
+    const wsClient = new WsClient(browserWebSocketFactory, serverSettings.serverUri);
     setClient(wsClient);
     try {
       wsClient.connect();
@@ -46,7 +46,7 @@ export function WebRemoteDisplay() {
   }
 
   function handleMessage(message) {
-    if (message.target !== device) return;
+    if (message.target !== serverSettings.device) return;
 
     console.log(`Received message`, message);
     if (message.type === actionTypes.displayMatrix) {
@@ -79,7 +79,7 @@ export function WebRemoteDisplay() {
 
   useEffect(() => {
     init();
-  }, [serverUri, device, setConnected, setClient]);
+  }, [serverSettings.serverUri, serverSettings.device, setConnected, setClient]);
 
   return (
     <div className="remote-display">
