@@ -10,6 +10,7 @@ export function App() {
 
   return (
     <div className="app">
+      <h1>pi-sense-hat-remote-simulator</h1>
       <SettingsProvider>
         <ServerSettings />
 

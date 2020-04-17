@@ -10,3 +10,8 @@ html {
   background: var(--primary-color);
   color: var(--primary-color-alt);
 }
+
+.app {
+  max-width: 48rem;
+  margin: 0 auto;
+}
