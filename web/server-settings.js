@@ -8,7 +8,7 @@ export function ServerSettings() {
   const { serverSettings, setServerSettings } = useContext(SettingsContext);
 
   function setValue(e) {
-    const newState = { ...state, [e.target.name]: e.target.value };
+    const newState = { ...serverSettings, [e.target.name]: e.target.value };
     setServerSettings(newState);
   }
 

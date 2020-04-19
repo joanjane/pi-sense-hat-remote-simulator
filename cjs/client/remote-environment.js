@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.EnvironmentSensors = void 0;
+exports.RemoteEnvironmentSensors = void 0;
 
 var _actions = require("./actions.js");
 
@@ -15,11 +15,11 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var EnvironmentSensors =
+var RemoteEnvironmentSensors =
 /*#__PURE__*/
 function () {
-  function EnvironmentSensors(webSocketFactory, serverUri, target) {
-    _classCallCheck(this, EnvironmentSensors);
+  function RemoteEnvironmentSensors(webSocketFactory, serverUri, target) {
+    _classCallCheck(this, RemoteEnvironmentSensors);
 
     this.client = new _wsClient.WsClient(webSocketFactory, serverUri);
     this.target = target;
@@ -30,7 +30,7 @@ function () {
     };
   }
 
-  _createClass(EnvironmentSensors, [{
+  _createClass(RemoteEnvironmentSensors, [{
     key: "connect",
     value: function connect(onConnect) {
       var _this = this;
@@ -62,7 +62,7 @@ function () {
     }
   }]);
 
-  return EnvironmentSensors;
+  return RemoteEnvironmentSensors;
 }();
 
-exports.EnvironmentSensors = EnvironmentSensors;
+exports.RemoteEnvironmentSensors = RemoteEnvironmentSensors;

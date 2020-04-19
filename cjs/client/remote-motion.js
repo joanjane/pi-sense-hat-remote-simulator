@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MotionSensors = void 0;
+exports.RemoteMotionSensors = void 0;
 
 var _actions = require("./actions");
 
@@ -13,11 +13,11 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var MotionSensors =
+var RemoteMotionSensors =
 /*#__PURE__*/
 function () {
-  function MotionSensors(webSocketFactory, serverUri, target) {
-    _classCallCheck(this, MotionSensors);
+  function RemoteMotionSensors(webSocketFactory, serverUri, target) {
+    _classCallCheck(this, RemoteMotionSensors);
 
     this.client = new WsClient(webSocketFactory, serverUri);
     this.target = target;
@@ -29,7 +29,7 @@ function () {
     };
   }
 
-  _createClass(MotionSensors, [{
+  _createClass(RemoteMotionSensors, [{
     key: "connect",
     value: function connect(onConnect) {
       var _this = this;
@@ -61,7 +61,7 @@ function () {
     }
   }]);
 
-  return MotionSensors;
+  return RemoteMotionSensors;
 }();
 
-exports.MotionSensors = MotionSensors;
+exports.RemoteMotionSensors = RemoteMotionSensors;
