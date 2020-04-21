@@ -1,52 +1,31 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import './web-remote-display.css';
 
-import { WsClient } from '../lib/client/ws-client';
-import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
 import { actionTypes } from '../lib/client/actions';
-import { SettingsContext } from './shared/server-settings-context';
+import { useWsClient } from './shared/server-settings-context';
 
 const displaySize = { x: 8, y: 8 };
 
 export function WebRemoteDisplay() {
-  const { serverSettings } = useContext(SettingsContext);
+  const { connected, client, device } = useWsClient();
+  const [subscriberId, setSubscriberId] = useState();
   const [message, setMessage] = useState(emptyMessage());
   const [display, setDisplay] = useState(emptyDisplay());
-  const [connected, setConnected] = useState(false);
-  const [client, setClient] = useState(false);
-  
+
   function init() {
-    const wsClient = new WsClient(browserWebSocketFactory, serverSettings.serverUri);
-    setClient(wsClient);
-    try {
-      wsClient.connect();
-    } catch (error) {
-      console.error(error);
-      setConnected(false);
-      return;
-    }
+    const subId = `WebRemoteDisplay${Date.now()}`;
+    setSubscriberId((previousSubscriber) => {
+      client.unsubscribeAll(previousSubscriber);
+      return subId;
+    });
 
-    wsClient
-      .onOpen(() => {
-        setConnected(true);
-        wsClient.onMessage((message) => {
-          handleMessage(message);
-        });
-      })
-      .onError((e) => {
-        console.log('Error on WebSocket', e);
-        setConnected(false);
-      })
-      .onClose((e) => {
-        console.log('WebSocket was closed', e);
-        setConnected(false);
-      });
-
-    return wsClient;
+    client.onMessage((message) => {
+      handleMessage(message);
+    }, subId);
   }
 
   function handleMessage(message) {
-    if (message.target !== serverSettings.device) return;
+    if (message.target !== device) return;
 
     console.log(`Received message`, message);
     if (message.type === actionTypes.displayMatrix) {
@@ -78,8 +57,13 @@ export function WebRemoteDisplay() {
   }
 
   useEffect(() => {
-    init();
-  }, [serverSettings.serverUri, serverSettings.device, setConnected, setClient]);
+    if (connected) {
+      init();
+    }
+    return () => {
+      subscriberId && client.unsubscribeAll(subscriberId);
+    };
+  }, [client, connected]);
 
   return (
     <div className="remote-display">
@@ -105,11 +89,6 @@ export function WebRemoteDisplay() {
           </p> :
           ''
       }
-
-      <div hidden={connected}>
-        WebSocket is not connected on Display.
-        <button className="button" onClick={init}>Reconnect</button>
-      </div>
     </div>
   );
 }
