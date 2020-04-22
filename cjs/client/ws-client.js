@@ -25,6 +25,10 @@ function () {
     key: "connect",
     value: function connect() {
       this.ws = this.webSocketFactory(this.serverUri);
+      this.onOpenSubscribers = new Map();
+      this.onCloseSubscribers = new Map();
+      this.onMessageSubscribers = new Map();
+      this.onErrorSubscribers = new Map();
     }
   }, {
     key: "close",
@@ -41,35 +45,96 @@ function () {
     }
   }, {
     key: "onOpen",
-    value: function onOpen(callback) {
+    value: function onOpen(callback, suscriberId) {
+      var _this = this;
+
       this.checkConnection();
-      this.ws.onopen = callback;
+      this.onOpenSubscribers.set(suscriberId, callback);
+
+      if (this.isOpen) {
+        callback();
+      }
+
+      if (!this.ws.onopen) {
+        this.ws.onopen = function (e) {
+          Array.from(_this.onOpenSubscribers).map(function (v) {
+            return v[1];
+          }).forEach(function (c) {
+            return c(e);
+          });
+        };
+      }
+
       return this;
     }
   }, {
     key: "onClose",
-    value: function onClose(callback) {
+    value: function onClose(callback, suscriberId) {
+      var _this2 = this;
+
       this.checkConnection();
-      this.ws.onclose = callback;
+      this.onCloseSubscribers.set(suscriberId, callback);
+
+      if (!this.ws.onclose) {
+        this.ws.onclose = function (e) {
+          Array.from(_this2.onCloseSubscribers).map(function (v) {
+            return v[1];
+          }).forEach(function (c) {
+            return c(e);
+          });
+        };
+      }
+
       return this;
     }
   }, {
     key: "onError",
-    value: function onError(callback) {
-      this.ws.onerror = callback;
+    value: function onError(callback, suscriberId) {
+      var _this3 = this;
+
+      this.checkConnection();
+      this.onErrorSubscribers.set(suscriberId, callback);
+
+      if (!this.ws.onerror) {
+        this.ws.onerror = function (e) {
+          Array.from(_this3.onErrorSubscribers).map(function (v) {
+            return v[1];
+          }).forEach(function (c) {
+            return c(e);
+          });
+        };
+      }
+
       return this;
     }
   }, {
     key: "onMessage",
-    value: function onMessage(callback) {
-      this.checkConnection();
+    value: function onMessage(callback, suscriberId) {
+      var _this4 = this;
 
-      this.ws.onmessage = function (event) {
-        var payload = JSON.parse(event.data);
-        callback(payload);
-      };
+      this.checkConnection();
+      this.onMessageSubscribers.set(suscriberId, callback);
+
+      if (!this.ws.onmessage) {
+        this.ws.onmessage = function (event) {
+          var payload = JSON.parse(event.data);
+          Array.from(_this4.onMessageSubscribers).map(function (v) {
+            return v[1];
+          }).forEach(function (c) {
+            return c(payload);
+          });
+        };
+      }
 
       return this;
+    }
+  }, {
+    key: "unsubscribeAll",
+    value: function unsubscribeAll(suscriberId) {
+      this.onOpenSubscribers.has(suscriberId) ? this.onOpenSubscribers["delete"](suscriberId) : null;
+      this.onCloseSubscribers.has(suscriberId) ? this.onCloseSubscribers["delete"](suscriberId) : null;
+      this.onErrorSubscribers.has(suscriberId) ? this.onErrorSubscribers["delete"](suscriberId) : null;
+      this.onMessageSubscribers.has(suscriberId) ? this.onMessageSubscribers["delete"](suscriberId) : null;
     }
   }, {
     key: "checkConnection",
@@ -80,6 +145,11 @@ function () {
     key: "readyState",
     get: function get() {
       return this.ws.readyState;
+    }
+  }, {
+    key: "isOpen",
+    get: function get() {
+      return this.ws.readyState === 1;
     }
   }]);
 

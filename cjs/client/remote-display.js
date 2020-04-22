@@ -36,13 +36,14 @@ function () {
       x: 8,
       y: 8
     };
+    this.subscriberId = "RemoteDisplay".concat(Date.now());
   }
 
   _createClass(RemoteDisplay, [{
     key: "connect",
     value: function connect(onConnect) {
       this.client.connect();
-      this.client.onOpen(onConnect);
+      this.client.onOpen(onConnect, this.subscriberId);
     }
   }, {
     key: "close",

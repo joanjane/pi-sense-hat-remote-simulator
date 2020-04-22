@@ -26,6 +26,7 @@ function () {
     this.onPressListeners = [];
     this.onReleaseListeners = [];
     this.onHoldListeners = [];
+    this.subscriberId = "RemoteJoystick".concat(Date.now());
   }
 
   _createClass(RemoteJoystick, [{
@@ -64,10 +65,10 @@ function () {
 
               break;
           }
-        });
+        }, _this.subscriberId);
 
         onOpen && onOpen();
-      });
+      }, this.subscriberId);
     }
   }, {
     key: "close",

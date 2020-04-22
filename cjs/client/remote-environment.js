@@ -24,10 +24,11 @@ function () {
     this.client = new _wsClient.WsClient(webSocketFactory, serverUri);
     this.target = target;
     this.sensors = {
-      temperature: 0,
-      pressure: 0,
-      humidity: 0
+      temperature: 21,
+      pressure: 1013,
+      humidity: 20
     };
+    this.subscriberId = "RemoteEnvironmentSensors".concat(Date.now());
   }
 
   _createClass(RemoteEnvironmentSensors, [{
@@ -45,10 +46,10 @@ function () {
           }
 
           _this.sensors = payload.status;
-        });
+        }, _this.subscriberId);
 
         onConnect && onConnect();
-      });
+      }, this.subscriberId);
     }
   }, {
     key: "close",
