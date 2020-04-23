@@ -16,7 +16,7 @@ export function EnvironmentSensors() {
     if (!connected) {
       return;
     }
-    client.send(updateEnvironmentStatusAction(device, 'test-server', status));
+    client.send(updateEnvironmentStatusAction(device, status));
   }
 
   const handleRangeChange = (e) => {

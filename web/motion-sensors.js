@@ -18,11 +18,11 @@ export function MotionSensors() {
       return;
     }
 
-    client.send(updateMotionStatusAction(device, 'test-server', {
+    client.send(updateMotionStatusAction(device, {
       acceleration: toVector(status.acceleration),
       gyroscope: toVector(status.gyroscope),
       orientation: toVector(status.orientation),
-      compass: 0
+      compass: status.compass
     }));
   }
 

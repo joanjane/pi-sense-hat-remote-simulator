@@ -10,7 +10,7 @@ export function Joystick() {
 
     const key = keyMap[e.key];
     console.log(`Send key ${key}`);
-    client.send(keyPressAction(device, 'test-server', key));
+    client.send(keyPressAction(device, key));
   }
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export function Joystick() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [connected, client, device]);
 
   return <></>;
 }
