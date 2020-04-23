@@ -1,7 +1,7 @@
 {
   "name": "pi-sense-hat-remote-simulator",
   "version": "1.0.0",
-  "description": "Project to simulate a LED matrix and joystick in a web environment for testing purposes",
+  "description": "Project to simulate a Pi SenseHat device in a web environment for testing purposes",
   "type": "module",
   "scripts": {
     "start": "webpack-dev-server --config web/es5/webpack.config.js --port 3000",
@@ -11,9 +11,6 @@
     "joystick": "node --experimental-modules lib/scripts/run-joystick-listener.js ws://localhost:8080 test-web-client",
     "prebuild:lib": "rimraf cjs/client && rimraf cjs/scripts && rimraf cjs/server",
     "build:lib": "babel lib --out-dir cjs",
-    "ws-serve:cjs": "node cjs/scripts/run-server.js 8080 4443",
-    "display:cjs": "node cjs/scripts/run-display-sequence.js ws://localhost:8080 test-web-client",
-    "joystick:cjs": "node cjs/scripts/run-joystick-listener.js ws://localhost:8080 test-web-client",
     "predeploy": "npm run build:web",
     "deploy": "gh-pages -d wwwroot -b gh-pages"
   },
