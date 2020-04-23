@@ -24,7 +24,7 @@ There are 4 modules available:
 * RemoteMotionSensors (acceleromenter, gyroscope, orientation, compass)
 
 ```js
-    // setup of Display module with CommonJS
+    // setup using CommonJS modules
     const { 
         RemoteDisplay, 
         RemoteJoystick, 
@@ -38,8 +38,7 @@ There are 4 modules available:
     const environmentSensors = new RemoteEnvironmentSensors(nodeWebSocketFactory, SERVER_URI, DEVICE);
     const motionSensors = new RemoteMotionSensors(nodeWebSocketFactory, SERVER_URI, DEVICE);
 
-    
-    // setup of Display module with ESM
+    // setup using ESM modules
     import { 
         RemoteDisplay, 
         RemoteJoystick, 
