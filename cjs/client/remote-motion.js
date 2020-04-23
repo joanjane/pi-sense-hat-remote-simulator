@@ -18,11 +18,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var RemoteMotionSensors =
 /*#__PURE__*/
 function () {
-  function RemoteMotionSensors(webSocketFactory, serverUri, target) {
+  function RemoteMotionSensors(webSocketFactory, serverUri, device) {
     _classCallCheck(this, RemoteMotionSensors);
 
     this.client = new _wsClient.WsClient(webSocketFactory, serverUri);
-    this.target = target;
+    this.device = device;
     this.motion = {
       acceleration: [0, 0, 0],
       gyroscope: [0, 0, 0],
@@ -42,7 +42,7 @@ function () {
         _this.client.onMessage(function (event) {
           var payload = event;
 
-          if (payload.type !== _actions.actionTypes.motionUpdate || payload.source !== _this.remoteDeviceId) {
+          if (payload.type !== _actions.actionTypes.motionUpdate || payload.device !== _this.device) {
             return;
           }
 

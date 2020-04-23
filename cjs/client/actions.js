@@ -18,19 +18,19 @@ var actionTypes = {
 };
 exports.actionTypes = actionTypes;
 
-function displayMatrixAction(target, matrix) {
+function displayMatrixAction(device, matrix) {
   return {
     type: actionTypes.displayMatrix,
-    target: target,
+    device: device,
     matrix: matrix,
     timestamp: Date.now()
   };
 }
 
-function displayMessageAction(target, message, speed, color) {
+function displayMessageAction(device, message, speed, color) {
   return {
     type: actionTypes.displayMessage,
-    target: target,
+    device: device,
     text: message,
     speed: speed,
     color: color,
@@ -38,32 +38,29 @@ function displayMessageAction(target, message, speed, color) {
   };
 }
 
-function keyPressAction(source, target, key) {
+function keyPressAction(device, key) {
   return {
     type: actionTypes.keyPress,
-    target: target,
-    source: source,
+    device: device,
     key: key,
     event: 'press',
     timestamp: Date.now()
   };
 }
 
-function updateEnvironmentStatusAction(source, target, status) {
+function updateEnvironmentStatusAction(device, status) {
   return {
     type: actionTypes.envSensorsUpdate,
-    target: target,
-    source: source,
+    device: device,
     status: status,
     timestamp: Date.now()
   };
 }
 
-function updateMotionStatusAction(source, target, status) {
+function updateMotionStatusAction(device, status) {
   return {
     type: actionTypes.motionUpdate,
-    target: target,
-    source: source,
+    device: device,
     status: status,
     timestamp: Date.now()
   };

@@ -39,7 +39,7 @@ function () {
         _this.client.onMessage(function (event) {
           var payload = event;
 
-          if (payload.type !== _actions.actionTypes.keyPress || payload.source !== _this.remoteDeviceId) {
+          if (payload.type !== _actions.actionTypes.keyPress || payload.device !== _this.remoteDeviceId) {
             return;
           }
 

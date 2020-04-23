@@ -25,7 +25,7 @@ export function WebRemoteDisplay() {
   }
 
   function handleMessage(message) {
-    if (message.target !== device) return;
+    if (message.device !== device) return;
 
     console.log(`Received message`, message);
     if (message.type === actionTypes.displayMatrix) {
