@@ -67,6 +67,6 @@ There are 4 modules available:
 * Motion sensors. Use xyz sliders on accelerometer, gyroscope, orientation and compass to simulate values.
     
 ## Samples
+* [pi-sense-hat-library-sample](https://github.com/joanjane/pi-sense-hat-library-sample) Sample application that uses all features from this library
 * [pi-sense-hat-weather-forecast](https://github.com/joanjane/pi-sense-hat-weather-forecast)
 See a simple weather forecast application.
-* more to come...
