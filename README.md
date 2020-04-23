@@ -32,8 +32,8 @@ There are 4 modules available:
 
     
     // setup of Display module with ESM
-    import { RemoteDisplay } from 'pi-sense-hat-remote-simulator/cjs/client';
-    import { nodeWebSocketFactory } from 'pi-sense-hat-remote-simulator/cjs/client/node-web-socket-provider';
+    import { RemoteDisplay } from 'pi-sense-hat-remote-simulator/client';
+    import { nodeWebSocketFactory } from 'pi-sense-hat-remote-simulator/client/node-web-socket-provider';
     const display = new RemoteDisplay(nodeWebSocketFactory, SERVER_URI, DEVICE);
 
 ```
