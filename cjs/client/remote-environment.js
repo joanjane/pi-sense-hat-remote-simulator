@@ -56,8 +56,8 @@ function () {
       this.client && this.client.close();
     }
   }, {
-    key: "getSensorStatus",
-    value: function getSensorStatus() {
+    key: "getSensorsStatus",
+    value: function getSensorsStatus() {
       return Promise.resolve(this.sensors);
     }
   }]);
