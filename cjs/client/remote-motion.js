@@ -7,6 +7,8 @@ exports.RemoteMotionSensors = void 0;
 
 var _actions = require("./actions");
 
+var _wsClient = require("./ws-client.js");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -16,17 +18,18 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var RemoteMotionSensors =
 /*#__PURE__*/
 function () {
-  function RemoteMotionSensors(webSocketFactory, serverUri, target) {
+  function RemoteMotionSensors(webSocketFactory, serverUri, device) {
     _classCallCheck(this, RemoteMotionSensors);
 
-    this.client = new WsClient(webSocketFactory, serverUri);
-    this.target = target;
+    this.client = new _wsClient.WsClient(webSocketFactory, serverUri);
+    this.device = device;
     this.motion = {
       acceleration: [0, 0, 0],
       gyroscope: [0, 0, 0],
       orientation: [0, 0, 0],
       compass: 0
     };
+    this.subscriberId = "RemoteMotionSensors".concat(Date.now());
   }
 
   _createClass(RemoteMotionSensors, [{
@@ -39,15 +42,15 @@ function () {
         _this.client.onMessage(function (event) {
           var payload = event;
 
-          if (payload.type !== _actions.actionTypes.motionUpdate || payload.source !== _this.remoteDeviceId) {
+          if (payload.type !== _actions.actionTypes.motionUpdate || payload.device !== _this.device) {
             return;
           }
 
           _this.motion = payload.status;
-        });
+        }, _this.subscriberId);
 
         onConnect && onConnect();
-      });
+      }, this.subscriberId);
     }
   }, {
     key: "close",

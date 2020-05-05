@@ -1,15 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { WsClient } from '../lib/client/ws-client';
-import { browserWebSocketFactory } from '../lib/client/browser-web-socket-provider';
+import React, { useState } from 'react';
 import { updateMotionStatusAction } from '../lib/client/actions';
 import { Collapsable } from './shared/collapsable';
-import { SettingsContext } from './shared/server-settings-context';
+import { useWsClient } from './shared/server-settings-context';
 
 export function MotionSensors() {
-  const { serverSettings } = useContext(SettingsContext);
+  const { connected, client, device } = useWsClient();
 
-  const [client, setClient] = useState();
-  const [connected, setConnected] = useState(false);
   const [status, setStatus] = useState({
     acceleration: { x: 0, y: 0, z: 0 },
     gyroscope: { x: 0, y: 0, z: 0 },
@@ -17,39 +13,16 @@ export function MotionSensors() {
     compass: 0
   });
 
-  function init() {
-    const wsClient = new WsClient(browserWebSocketFactory, serverSettings.serverUri);
-    setClient(wsClient);
-    try {
-      wsClient.connect();
-    } catch (error) {
-      console.error(error);
-      setConnected(false);
+  const sendStatus = () => {
+    if (!connected) {
       return;
     }
 
-    wsClient
-      .onOpen(() => {
-        setConnected(true);
-      })
-      .onError((e) => {
-        setConnected(false);
-      })
-      .onClose((e) => {
-        setConnected(false);
-      });
-  }
-
-  useEffect(() => {
-    init();
-  }, [serverSettings.serverUri, serverSettings.device, setConnected, setClient]);
-
-  const sendStatus = () => {
-    client.send(updateMotionStatusAction(serverSettings.device, 'test-server', {
+    client.send(updateMotionStatusAction(device, {
       acceleration: toVector(status.acceleration),
       gyroscope: toVector(status.gyroscope),
       orientation: toVector(status.orientation),
-      compass: 0
+      compass: status.compass
     }));
   }
 
@@ -61,15 +34,6 @@ export function MotionSensors() {
     status[e.target.name][e.target.dataset.coord] = e.target.value;
     setStatus({ ...status });
   };
-
-  if (!connected) {
-    return (
-      <div>
-        WebSocket is not connected on Motion Sensors.
-        <button className="button" onClick={init}>Reconnect</button>
-      </div>
-    );
-  }
 
   return (
     <>
@@ -124,7 +88,6 @@ export function MotionSensors() {
           </div>
         </div>
       </Collapsable>
-
     </>
   );
 }

@@ -26,23 +26,24 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var RemoteDisplay =
 /*#__PURE__*/
 function () {
-  function RemoteDisplay(webSocketFactory, serverUri, target) {
+  function RemoteDisplay(webSocketFactory, serverUri, device) {
     _classCallCheck(this, RemoteDisplay);
 
     this.client = new _wsClient.WsClient(webSocketFactory, serverUri);
-    this.target = target;
+    this.device = device;
     this.display = empty();
     this.displaySize = {
       x: 8,
       y: 8
     };
+    this.subscriberId = "RemoteDisplay".concat(Date.now());
   }
 
   _createClass(RemoteDisplay, [{
     key: "connect",
     value: function connect(onConnect) {
       this.client.connect();
-      this.client.onOpen(onConnect);
+      this.client.onOpen(onConnect, this.subscriberId);
     }
   }, {
     key: "close",
@@ -52,7 +53,7 @@ function () {
   }, {
     key: "showMessage",
     value: function showMessage(message, speed, color, done) {
-      this.client.send((0, _actions.displayMessageAction)(this.target, message, speed, color));
+      this.client.send((0, _actions.displayMessageAction)(this.device, message, speed, color));
       setTimeout(function () {
         return done && done();
       }, speed * 1000);
@@ -89,7 +90,7 @@ function () {
   }, {
     key: "render",
     value: function render() {
-      this.client.send((0, _actions.displayMatrixAction)(this.target, this.display));
+      this.client.send((0, _actions.displayMatrixAction)(this.device, this.display));
     }
   }, {
     key: "clear",

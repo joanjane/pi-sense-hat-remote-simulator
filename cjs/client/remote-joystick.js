@@ -26,6 +26,7 @@ function () {
     this.onPressListeners = [];
     this.onReleaseListeners = [];
     this.onHoldListeners = [];
+    this.subscriberId = "RemoteJoystick".concat(Date.now());
   }
 
   _createClass(RemoteJoystick, [{
@@ -38,7 +39,7 @@ function () {
         _this.client.onMessage(function (event) {
           var payload = event;
 
-          if (payload.type !== _actions.actionTypes.keyPress || payload.source !== _this.remoteDeviceId) {
+          if (payload.type !== _actions.actionTypes.keyPress || payload.device !== _this.remoteDeviceId) {
             return;
           }
 
@@ -64,10 +65,10 @@ function () {
 
               break;
           }
-        });
+        }, _this.subscriberId);
 
         onOpen && onOpen();
-      });
+      }, this.subscriberId);
     }
   }, {
     key: "close",

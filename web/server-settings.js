@@ -5,7 +5,7 @@ import { SettingsContext } from './shared/server-settings-context';
 
 
 export function ServerSettings() {
-  const { serverSettings, setServerSettings } = useContext(SettingsContext);
+  const { serverSettings, setServerSettings, connected } = useContext(SettingsContext);
 
   function setValue(e) {
     const newState = { ...serverSettings, [e.target.name]: e.target.value };
@@ -13,7 +13,7 @@ export function ServerSettings() {
   }
 
   return (
-    <Collapsable title="Server settings">
+    <Collapsable title={`Server settings (${connected ? 'connected' : 'disconnected'})`}>
       <div className="d-flex flex-direction-row flex-direction-column-md p-3">
         <div className="form-group p-md-0 p-2">
           <label htmlFor="serverUri">Server URI</label>

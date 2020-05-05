@@ -6,10 +6,10 @@ var _nodeWebSocketProvider = require("../client/node-web-socket-provider.js");
 
 var env = {
   SERVER_URI: process.argv[2] || process.env.SERVER_URI || 'ws://localhost:8080',
-  TARGET: process.argv[3] || process.env.REMOTE_DEVICE || 'test-web-client'
+  DEVICE: process.argv[3] || process.env.DEVICE || 'test-web-client'
 };
-console.log("Running remote joystick listener. Connecting to ".concat(env.SERVER_URI, ", device ").concat(env.TARGET));
-var joystick = new _remoteJoystick.RemoteJoystick(_nodeWebSocketProvider.nodeWebSocketFactory, env.SERVER_URI, env.TARGET);
+console.log("Running remote joystick listener. Connecting to ".concat(env.SERVER_URI, ", device ").concat(env.DEVICE));
+var joystick = new _remoteJoystick.RemoteJoystick(_nodeWebSocketProvider.nodeWebSocketFactory, env.SERVER_URI, env.DEVICE);
 joystick.connect();
 joystick.on('press', function (direction) {
   console.log('Received press: ', direction);

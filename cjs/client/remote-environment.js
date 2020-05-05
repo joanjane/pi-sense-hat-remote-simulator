@@ -18,16 +18,17 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var RemoteEnvironmentSensors =
 /*#__PURE__*/
 function () {
-  function RemoteEnvironmentSensors(webSocketFactory, serverUri, target) {
+  function RemoteEnvironmentSensors(webSocketFactory, serverUri, device) {
     _classCallCheck(this, RemoteEnvironmentSensors);
 
     this.client = new _wsClient.WsClient(webSocketFactory, serverUri);
-    this.target = target;
+    this.device = device;
     this.sensors = {
-      temperature: 0,
-      pressure: 0,
-      humidity: 0
+      temperature: 21,
+      pressure: 1013,
+      humidity: 20
     };
+    this.subscriberId = "RemoteEnvironmentSensors".concat(Date.now());
   }
 
   _createClass(RemoteEnvironmentSensors, [{
@@ -40,15 +41,15 @@ function () {
         _this.client.onMessage(function (event) {
           var payload = event;
 
-          if (payload.type !== _actions.actionTypes.envSensorsUpdate || payload.source !== _this.remoteDeviceId) {
+          if (payload.type !== _actions.actionTypes.envSensorsUpdate || payload.device !== _this.device) {
             return;
           }
 
           _this.sensors = payload.status;
-        });
+        }, _this.subscriberId);
 
         onConnect && onConnect();
-      });
+      }, this.subscriberId);
     }
   }, {
     key: "close",
