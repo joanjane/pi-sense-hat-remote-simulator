@@ -37,11 +37,11 @@ export function WebRemoteDisplay() {
       });
       setDisplay(twoDDisplay);
     } else if (message.type === actionTypes.displayMessage) {
-      showMessage(message.text, message.color);
+      showMessage(message.text, message.color, message.background);
     }
   }
 
-  function showMessage(text, color) {
+  function showMessage(text, color, background) {
     if (message.currentTimeout) {
       clearTimeout(message.currentTimeout);
     }
@@ -52,6 +52,7 @@ export function WebRemoteDisplay() {
     setMessage({
       text,
       color,
+      background,
       currentTimeout
     });
   }
@@ -84,7 +85,7 @@ export function WebRemoteDisplay() {
       </table>
       {
         message.text ?
-          <p className="remote-display__message" style={({ color: message.color })}>
+          <p className="remote-display__message" style={({ color: message.color, background: (background || '#000000') })}>
             {message.text}
           </p> :
           ''
@@ -108,5 +109,6 @@ const emptyDisplay = () => [
 const emptyMessage = () => ({
   text: '',
   color: '',
+  background: '#000000',
   currentTimeout: null
 });
