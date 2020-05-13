@@ -14,7 +14,6 @@ This project has 3 parts:
 
 You can use online version of the client if you deploy server with a valid TLS certificate and a secure connection with `wss://`. Otherwise, you can install a self signed cert generated on to use localhost server, already generated as dev-cert.cert and dev-cert.key when server is launched.
 
-
 ## Client library
 The client library is built with ESM modules and is also distributed as "classic" CommonJS modules for compatibility.
 There are 4 modules available:
@@ -25,16 +24,32 @@ There are 4 modules available:
 * RemoteMotionSensors (acceleromenter, gyroscope, orientation, compass)
 
 ```js
-    // setup of Display module with CommonJS
-    const { RemoteDisplay } = require('pi-sense-hat-remote-simulator/cjs/client');
+    // setup using CommonJS modules
+    const { 
+        RemoteDisplay, 
+        RemoteJoystick, 
+        RemoteEnvironmentSensors, 
+        RemoteMotionSensors
+    } = require('pi-sense-hat-remote-simulator/cjs/client');
+    
     const { nodeWebSocketFactory } = require('pi-sense-hat-remote-simulator/cjs/client/node-web-socket-provider');
     const display = new RemoteDisplay(nodeWebSocketFactory, SERVER_URI, DEVICE);
+    const joystick = new RemoteJoystick(nodeWebSocketFactory, SERVER_URI, DEVICE);
+    const environmentSensors = new RemoteEnvironmentSensors(nodeWebSocketFactory, SERVER_URI, DEVICE);
+    const motionSensors = new RemoteMotionSensors(nodeWebSocketFactory, SERVER_URI, DEVICE);
 
-    
-    // setup of Display module with ESM
-    import { RemoteDisplay } from 'pi-sense-hat-remote-simulator/cjs/client';
-    import { nodeWebSocketFactory } from 'pi-sense-hat-remote-simulator/cjs/client/node-web-socket-provider';
+    // setup using ESM modules
+    import { 
+        RemoteDisplay, 
+        RemoteJoystick, 
+        RemoteEnvironmentSensors, 
+        RemoteMotionSensors
+    } from 'pi-sense-hat-remote-simulator/client';
+    import { nodeWebSocketFactory } from 'pi-sense-hat-remote-simulator/client/node-web-socket-provider';
     const display = new RemoteDisplay(nodeWebSocketFactory, SERVER_URI, DEVICE);
+    const joystick = new RemoteJoystick(nodeWebSocketFactory, SERVER_URI, DEVICE);
+    const environmentSensors = new RemoteEnvironmentSensors(nodeWebSocketFactory, SERVER_URI, DEVICE);
+    const motionSensors = new RemoteMotionSensors(nodeWebSocketFactory, SERVER_URI, DEVICE);
 
 ```
 
@@ -51,6 +66,6 @@ There are 4 modules available:
 * Motion sensors. Use xyz sliders on accelerometer, gyroscope, orientation and compass to simulate values.
     
 ## Samples
+* [pi-sense-hat-library-sample](https://github.com/joanjane/pi-sense-hat-library-sample) Sample application that uses all features from this library
 * [pi-sense-hat-weather-forecast](https://github.com/joanjane/pi-sense-hat-weather-forecast)
 See a simple weather forecast application.
-* more to come...
