@@ -85,7 +85,7 @@ export function WebRemoteDisplay() {
       </table>
       {
         message.text ?
-          <p className="remote-display__message" style={({ color: message.color, background: (background || '#000000') })}>
+          <p className="remote-display__message" style={({ color: message.color, background: message.background })}>
             {message.text}
           </p> :
           ''
