@@ -7,34 +7,43 @@ import { SettingsContext } from './shared/server-settings-context';
 export function SampleSequence() {
   const { serverSettings } = useContext(SettingsContext);
 
-  const [state, setState] = useState({
-    connected: false
-  });
+  const [connected, setConnected] = useState(false);
+  const [display, setDisplay] = useState();
 
-  let display = new RemoteDisplay(browserWebSocketFactory, serverSettings.serverUri, serverSettings.device);
   async function init() {
+    setConnected(false);
+    const display = new RemoteDisplay(browserWebSocketFactory, serverSettings.serverUri, serverSettings.device);
+    setDisplay(display);
     try {
       display.connect(() => {
-        setState({ ...state, connected: true });
+        setConnected(true);
       });
-    } catch(error) {
+    } catch (error) {
       console.error(error);
-      setState({ ...state, connected: false });
-      return;
+      setConnected(false);
     }
+    return display;
   }
 
   useEffect(() => {
-    init();
+    const dp = init();
 
     return () => {
-      display && display.close();
+      dp && dp.close();
     };
   }, [serverSettings.serverUri, serverSettings.device]);
 
+  if (!connected) {
+    return null;
+  }
   return (
-    <div hidden={!state.connected}>
+    <>
       <button className="button" onClick={() => flashTestSequence(display)}>Sample</button>
-    </div>
+      <input type="text" placeholder="Type a message to display" className="form-control"
+        onBlur={(e) =>{
+          display.showMessage(e.target.value, 0.1, '#bbaa00');
+        }
+      } />
+    </>
   );
 }

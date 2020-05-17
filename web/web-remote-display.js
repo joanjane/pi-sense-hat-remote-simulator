@@ -3,14 +3,15 @@ import './web-remote-display.css';
 
 import { actionTypes } from '../lib/client/actions';
 import { useWsClient } from './shared/server-settings-context';
+import { DisplayMessageScroller, logDisplay, formatColor } from './core/display-utils';
 
 const displaySize = { x: 8, y: 8 };
 
 export function WebRemoteDisplay() {
   const { connected, client, device } = useWsClient();
   const [subscriberId, setSubscriberId] = useState();
-  const [message, setMessage] = useState(emptyMessage());
   const [display, setDisplay] = useState(emptyDisplay());
+  const [onMessageCancelListeners, setOnMessageCancelListeners] = useState([]);
 
   function init() {
     const subId = `WebRemoteDisplay${Date.now()}`;
@@ -29,31 +30,57 @@ export function WebRemoteDisplay() {
 
     console.log(`Received message`, message);
     if (message.type === actionTypes.displayMatrix) {
-      const twoDDisplay = emptyDisplay();
-      message.matrix.forEach((c, i) => {
-        const y = Math.trunc(i / displaySize.x);
-        const x = i % displaySize.x;
-        twoDDisplay[y][x] = c;
-      });
-      setDisplay(twoDDisplay);
+      setDisplay(map2DMatrix(message.matrix));
     } else if (message.type === actionTypes.displayMessage) {
-      showMessage(message.text, message.color, message.background);
+      cancelCurrentMessage();
+      showMessage(message.text, message.speed, message.color, message.background);
     }
   }
 
-  function showMessage(text, color, background) {
-    if (message.currentTimeout) {
-      clearTimeout(message.currentTimeout);
-    }
-    const currentTimeout = setTimeout(() => {
-      setMessage(emptyMessage());
-    }, 15000);
+  function showMessage(message, speed, color, background) {
+    const promise = new Promise((resolve, reject) => {
+      setOnMessageCancelListeners((prevOnMessageCancelListeners) => [...prevOnMessageCancelListeners, reject]);
+      const messageScroller = new DisplayMessageScroller(message, color, background);
+      scrollMessage(
+        messageScroller,
+        (pixels) => {
+          console.log(logDisplay(pixels, displaySize.x, displaySize.y));
+          setDisplay(map2DMatrix(pixels));
+        },
+        speed,
+        () => {
+          resolve();
+          setOnMessageCancelListeners([]);
+        },
+        (cancelListener) => setOnMessageCancelListeners((prevOnMessageCancelListeners) =>
+          [...prevOnMessageCancelListeners, cancelListener]));
+    });
 
-    setMessage({
-      text,
-      color,
-      background,
-      currentTimeout
+    return promise;
+  }
+
+  function cancelCurrentMessage() {
+    if (onMessageCancelListeners.length > 0) {
+      onMessageCancelListeners.forEach(l => l());
+      onMessageCancelListeners = [];
+      setOnMessageCancelListeners(onMessageCancelListeners);
+    }
+  }
+
+  function scrollMessage(messageScroller, setPixels, speed, resolve, onCancel) {
+    const next = messageScroller.next();
+    if (next.done) {
+      resolve();
+      return;
+    }
+
+    setPixels(next.value);
+    const timeout = setTimeout(() => {
+      scrollMessage(messageScroller, setPixels, speed, resolve, onCancel);
+    }, 1000 * speed);
+
+    onCancel && onCancel(() => {
+      clearTimeout(timeout);
     });
   }
 
@@ -75,7 +102,7 @@ export function WebRemoteDisplay() {
               <tr key={y}>
                 {
                   row.map((cell, x) =>
-                    <td key={x} style={({ background: cell })} className="remote-display__pixel"></td>
+                    <td key={x} style={({ background: `rgb(${cell[0]},${cell[1]},${cell[2]})` })} className="remote-display__pixel"></td>
                   )
                 }
               </tr>
@@ -83,18 +110,11 @@ export function WebRemoteDisplay() {
           }
         </tbody>
       </table>
-      {
-        message.text ?
-          <p className="remote-display__message" style={({ color: message.color, background: message.background })}>
-            {message.text}
-          </p> :
-          ''
-      }
     </div>
   );
 }
 
-const O = '#000000';
+const O = [0,0,0];
 const emptyDisplay = () => [
   [O, O, O, O, O, O, O, O],
   [O, O, O, O, O, O, O, O],
@@ -110,5 +130,15 @@ const emptyMessage = () => ({
   text: '',
   color: '',
   background: '#000000',
-  currentTimeout: null
+  speed: 0.2
 });
+
+function map2DMatrix(matrix) {
+  const twoDDisplay = emptyDisplay();
+  matrix.forEach((c, i) => {
+    const y = Math.trunc(i / displaySize.x);
+    const x = i % displaySize.x;
+    twoDDisplay[y][x] = formatColor(c);
+  });
+  return twoDDisplay;
+}
