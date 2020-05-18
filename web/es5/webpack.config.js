@@ -4,6 +4,10 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = (env, argv) => ({
   entry: ['./web/index.js'],
+  entry: {
+    index: './web/index.js',
+    pixelDrawer: './web/pixel-drawer/index.js'
+  },
   devtool: argv.mode === 'production' ? 'none' : 'eval-source-map',
   module: {
     rules: [
@@ -35,7 +39,15 @@ module.exports = (env, argv) => ({
       hash: true,
       inject: 'body',
       template: './web/index.html',
-      filename: 'index.html'
+      filename: 'index.html',
+      excludeChunks: ['pixelDrawer']
+    }),
+    new HtmlWebpackPlugin({
+      hash: true,
+      inject: 'body',
+      template: './web/pixel-drawer/index.html',
+      filename: 'pixel-drawer/index.html',
+      excludeChunks: ['index']
     })
   ],
   output: {

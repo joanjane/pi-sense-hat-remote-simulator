@@ -127,7 +127,6 @@ const letterSpacing = '¶';
 function convertRenderMessage(message) {
   // append 4 spaces to scroll until an empty screen
   return Array.from(Array.from(message).reduce((a,b) => { 
-    debugger;
     return a[a.length-1] !== ' ' && b !== ' ' ? a+letterSpacing+b : a+b;
   }) + emptyPadding);
 }
