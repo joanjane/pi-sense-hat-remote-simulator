@@ -26,7 +26,8 @@ export function SampleSequence() {
   }
 
   useEffect(() => {
-    const dp = init();
+    let dp;
+    init().then(display => dp = display);
 
     return () => {
       dp && dp.close();
