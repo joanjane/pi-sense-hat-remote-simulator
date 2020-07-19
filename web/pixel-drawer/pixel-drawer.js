@@ -1,5 +1,6 @@
 import './pixel-drawer.css';
 import React, { useState, useEffect } from 'react';
+import { CharTableParser } from './char-table-parser';
 
 const displaySize = { x: 8, y: 8 };
 
@@ -74,6 +75,7 @@ export function PixelDrawer() {
           </code>
         </pre>
       </div>
+      <CharTableParser />
     </div>
   );
 }

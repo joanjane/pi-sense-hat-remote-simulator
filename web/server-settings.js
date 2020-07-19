@@ -13,7 +13,7 @@ export function ServerSettings() {
   }
 
   return (
-    <Collapsable title={`Server settings (${connected ? 'connected' : 'disconnected'})`}>
+    <Collapsable collapsedByDefault={false} title={`Server settings (${connected ? 'connected' : 'disconnected'})`}>
       <div className="d-flex flex-direction-row flex-direction-column-md p-3">
         <div className="form-group p-md-0 p-2">
           <label htmlFor="serverUri">Server URI</label>

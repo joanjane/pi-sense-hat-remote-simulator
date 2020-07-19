@@ -27,13 +27,14 @@ function displayMatrixAction(device, matrix) {
   };
 }
 
-function displayMessageAction(device, message, speed, color) {
+function displayMessageAction(device, message, speed, color, background) {
   return {
     type: actionTypes.displayMessage,
     device: device,
     text: message,
     speed: speed,
     color: color,
+    background: background,
     timestamp: Date.now()
   };
 }

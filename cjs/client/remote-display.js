@@ -52,11 +52,11 @@ function () {
     }
   }, {
     key: "showMessage",
-    value: function showMessage(message, speed, color, done) {
-      this.client.send((0, _actions.displayMessageAction)(this.device, message, speed, color));
-      setTimeout(function () {
-        return done && done();
-      }, speed * 1000);
+    value: function showMessage(message, speed, color, background) {
+      this.client.send((0, _actions.displayMessageAction)(this.device, message, speed, color, background || '#000000'));
+      return new Promise(function (resolve) {
+        setTimeout(resolve, speed * 1000);
+      });
     }
   }, {
     key: "setPixel",

@@ -30,9 +30,9 @@ function flashTestSequence(display, onFinish) {
   }, function () {
     display.setPixels(testPixels);
   }, function () {
-    display.showMessage("This is a test message ".concat(Date.now()), 0, '#bbaa00');
-  }, function () {
-    console.log('Finished'), onFinish && onFinish();
+    display.showMessage("This is a test message ".concat(Date.now()), 0.1, '#bbaa00').then(function () {
+      console.log('Finished'), onFinish && onFinish();
+    });
   }];
   console.log('Starting...');
   display.connect(function () {

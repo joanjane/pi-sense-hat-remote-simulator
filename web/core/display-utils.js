@@ -1,4 +1,15 @@
-import { emptyScreen, charTable } from './display-char-table';
+import emojis from './emojis.json';
+import symbols from './symbols.json';
+import lowercase from './lowercase.json';
+import uppercase from './uppercase.json';
+
+const charTable = {
+  ...emojis,
+  ...symbols,
+  ...lowercase,
+  ...uppercase
+};
+export const emptyScreen = () => new Array(64).fill(' ');
 
 export class DisplayMessageScroller {
   constructor(message, color, background) {
@@ -36,7 +47,7 @@ export class DisplayMessageScroller {
   }
 
   renderPixels(display, color, background) {
-    return display.map(p => p ? color : background);
+    return display.map(p => p === 'x' ? color : background);
   }
 
   shiftColumn(displayMatrix, next) {
