@@ -2,12 +2,14 @@ import emojis from './emojis.json';
 import symbols from './symbols.json';
 import lowercase from './lowercase.json';
 import uppercase from './uppercase.json';
+import numbers from './numbers.json';
 
 const charTable = {
   ...emojis,
   ...symbols,
   ...lowercase,
-  ...uppercase
+  ...uppercase,
+  ...numbers
 };
 export const emptyScreen = () => new Array(64).fill(' ');
 
@@ -136,6 +138,9 @@ export function hexToRgb(hex) {
 const emptyPadding = '    ';
 const letterSpacing = '¶';
 function convertRenderMessage(message) {
+  // remove diacritics
+  message = message.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  
   // append 4 spaces to scroll until an empty screen
   return Array.from(Array.from(message).reduce((a,b) => { 
     return a[a.length-1] !== ' ' && b !== ' ' ? a+letterSpacing+b : a+b;
