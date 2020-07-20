@@ -1,8 +1,8 @@
-import emojis from './emojis.json';
-import symbols from './symbols.json';
-import lowercase from './lowercase.json';
-import uppercase from './uppercase.json';
-import numbers from './numbers.json';
+import emojis from './fonts/emojis.json';
+import symbols from './fonts/symbols.json';
+import lowercase from './fonts/lowercase.json';
+import uppercase from './fonts/uppercase.json';
+import numbers from './fonts/numbers.json';
 
 const charTable = {
   ...emojis,
