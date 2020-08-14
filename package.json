@@ -9,6 +9,7 @@
     "ws-serve": "node --experimental-modules lib/scripts/run-server.js 8080 4443",
     "display": "node --experimental-modules lib/scripts/run-display-sequence.js ws://localhost:8080 test-web-client",
     "joystick": "node --experimental-modules lib/scripts/run-joystick-listener.js ws://localhost:8080 test-web-client",
+    "sensors": "node --experimental-modules lib/scripts/run-sensors-listener.js ws://localhost:8080 test-web-client",
     "prebuild:lib": "rimraf cjs/client && rimraf cjs/scripts && rimraf cjs/server",
     "build:lib": "babel lib --out-dir cjs",
     "predeploy": "npm run build:web",

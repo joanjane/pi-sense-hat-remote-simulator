@@ -20,7 +20,7 @@ export function EnvironmentSensors() {
   }
 
   const handleRangeChange = (e) => {
-    setStatus({ ...status, ...{ [e.target.name]: e.target.value } });
+    setStatus({ ...status, ...{ [e.target.name]: parseInt(e.target.value) } });
   };
 
   return (

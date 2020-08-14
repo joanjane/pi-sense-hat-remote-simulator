@@ -27,11 +27,11 @@ export function MotionSensors() {
   }
 
   const handleRangeChange = (e) => {
-    setStatus({ ...status, ...{ [e.target.name]: e.target.value } });
+    setStatus({ ...status, ...{ [e.target.name]: parseInt(e.target.value) } });
   };
 
   const handleCoordChange = (e) => {
-    status[e.target.name][e.target.dataset.coord] = e.target.value;
+    status[e.target.name][e.target.dataset.coord] = parseInt(e.target.value);
     setStatus({ ...status });
   };
 
